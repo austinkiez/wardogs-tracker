@@ -386,7 +386,7 @@
       position: relative;
       flex: 1;
       min-width: 260px;
-      max-width: 520px;
+      max-width: 100%;
     }
 
     .search-input {
@@ -1489,18 +1489,6 @@
           <div class="search-box-wrapper">
             <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             <input type="text" class="search-input" id="search-input" placeholder="Search Joe Brammer reddit replies, 60Hz tickrate, patch notes, Gepard, FOBs..." oninput="handleSearchFilter()">
-          </div>
-
-          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-            <div class="sort-indicator">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-              <span>SORT: NEWEST FIRST</span>
-            </div>
-
-            <label style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-dim); display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
-              <input type="checkbox" id="filter-replies-only" onchange="handleReplyToggle(this.checked)">
-              <span>Show Dev Replies Only</span>
-            </label>
           </div>
         </div>
 
@@ -2739,7 +2727,7 @@
       document.getElementById("search-input").value = "";
       currentSourceFilter = "all";
       filterRepliesOnly = false;
-      document.getElementById("filter-replies-only").checked = false;
+      const filterRepliesEl = document.getElementById("filter-replies-only"); if (filterRepliesEl) filterRepliesEl.checked = false;
       document.querySelectorAll(".pill-btn").forEach(b => {
         b.classList.toggle("active", b.getAttribute("data-source") === "all");
       });
