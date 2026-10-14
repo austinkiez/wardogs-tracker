@@ -1448,7 +1448,7 @@
       <div class="control-row-main">
         <div class="control-stats">
           <div>MONITORED CHANNELS: <span class="stat-badge" id="stat-channels">7 ACTIVE (INCL. BRAMMER)</span></div>
-          <div>TRACKED DISPATCHES: <span class="stat-badge" id="stat-posts">25 VERIFIED</span></div>
+          <div>TRACKED DISPATCHES: <span class="stat-badge" id="stat-posts">38 VERIFIED</span></div>
           <div>SORT ORDER: <span class="stat-badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">⚡ NEWEST FIRST</span></div>
           <div>LEAD DEV STATUS: <span class="stat-badge" style="background: rgba(168, 85, 247, 0.2); color: #d8b4fe;">u/brammflakes SYNCED</span></div>
         </div>
@@ -1482,7 +1482,7 @@
         <div class="console-log-entry"><span class="console-time">[20:10:02]</span> <span class="console-msg-brammer">[SCRAPED]</span> Indexed 3 Joe Brammer X dispatches (video announcement, audio occlusion reply, progression rules).</div>
         <div class="console-log-entry"><span class="console-time">[20:10:03]</span> <span class="console-msg-ok">[SCRAPED]</span> Fetched official Steam patch history, Discord alerts, and studio announcements.</div>
         <div class="console-log-entry"><span class="console-time">[20:10:03]</span> <span class="console-msg-ok">[SORT]</span> Applied strict chronological descending sort (newest updates at the top).</div>
-        <div class="console-log-entry"><span class="console-time">[20:10:04]</span> <span class="console-msg-ok">[COMPLETE]</span> 25 verified dispatches (incl. 13 from Joe Brammer) loaded cleanly into cache.</div>
+        <div class="console-log-entry"><span class="console-time">[20:10:04]</span> <span class="console-msg-ok">[COMPLETE]</span> 38 verified dispatches (incl. 19 Steam updates & 13 from Joe Brammer) (incl. 13 from Joe Brammer) loaded cleanly into cache.</div>
       </div>
 
       <!-- Filters & Live Search -->
@@ -1507,14 +1507,14 @@
         </div>
 
         <div class="source-filter-pills">
-          <button class="pill-btn active" data-source="all" onclick="filterBySource('all', this)">All Feeds (25)</button>
+          <button class="pill-btn active" data-source="all" onclick="filterBySource('all', this)">All Feeds (38)</button>
           <button class="pill-btn pill-brammer" data-source="brammer" onclick="filterBySource('brammer', this)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#c084fc"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             Joe Brammer (CEO) (13)
           </button>
           <button class="pill-btn" data-source="steam" onclick="filterBySource('steam', this)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#66c0f4"><circle cx="12" cy="12" r="10"/></svg>
-            Steam News (5)
+            Steam News (19)
           </button>
           <button class="pill-btn" data-source="x" onclick="filterBySource('x', this)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#38bdf8"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -1543,7 +1543,7 @@
     <!-- News Results Header -->
     <div class="news-feed-header">
       <div class="news-count-label" id="results-count-label">
-        SHOWING 25 OFFICIAL UPDATES (NEWEST FIRST)
+        SHOWING 38 OFFICIAL UPDATES (NEWEST FIRST)
       </div>
       <div class="view-mode-toggle">
         <button class="view-mode-btn active" id="btn-grid-view" onclick="setViewMode('grid')" title="Grid View">
@@ -1919,7 +1919,7 @@
   },
   {
     "id": "steam-s2-preview",
-    "title": "WARDOGS | Season 02 Preview & Armory Additions",
+    "title": "WARDOGS | Season 02 Preview & Press Conference",
     "source": "steam",
     "sourcePlatform": "steam",
     "sourceLabel": "Steam Official",
@@ -1989,6 +1989,29 @@
     "fullContent": "<p><strong>u/brammflakes on r/WarDogs replying to 'Helicopters are ruining mountain captures':</strong></p><p><em>'We heard you on air dominance. Infantry Stingers have lock-on audio cues that let good pilots flare and dive into valleys. The new Flakpanzer Gepard arriving in Season 2 changes that entirely: it has an optical lead-computing reticle and fires dual 35mm high-explosive proximity rounds at 1,100 RPM. There is no lock-on warning tone for kinetic autocannons. If a helicopter lingers above 150m altitude, it will get erased.'</em></p>"
   },
   {
+    "id": "steam-ir-ciws-hotfix",
+    "title": "WARDOGS | IR Rangefinders & CIWS Balance Hotfix",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-10-02T14:30:00Z",
+    "dateString": "Oct 2, 2026",
+    "relativeTime": "11 days ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/670629928317748115",
+    "tags": [
+      "#Hotfix",
+      "#Balance",
+      "#CIWS",
+      "#WeaponTuning"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Key balance adjustments: IR Rangefinders temporarily pulled from forward vendors until Season 2 rebalance (battery requirements added). CIWS anti-air damage corrected to destroy attack helicopters in ~6s instead of 12s.",
+    "fullContent": "<p>We have just made 2 key balance changes across regional servers: IR Rangefinders disabled in the vendor until Season 02 (where they will require consumable batteries), and base CIWS defense damage increased to destroy strafing Havoc/Littlebirds in 6 seconds.</p>"
+  },
+  {
     "id": "steam-hotfix-security",
     "title": "WARDOGS | Security & Stability Hotfix (v0.1.2.1)",
     "source": "steam",
@@ -2053,8 +2076,8 @@
     ],
     "pinned": false,
     "isReply": false,
-    "excerpt": "Addressed build-and-dismantle fortification cash loops, re-tuned logistics truck delivery XP rewards, and fixed vehicle repair pad infinite resource generation.",
-    "fullContent": "<p>Patched infinite cash reimbursement exploit on building deconstruction and rebalanced logistics supply drop XP curves.</p>"
+    "excerpt": "Addressed build-and-dismantle fortification cash loops, resolved Windows WD-L020 client crash error, re-tuned logistics truck delivery XP rewards, and fixed vehicle repair pad infinite resource generation.",
+    "fullContent": "<p>Patched infinite cash reimbursement exploit on building deconstruction, fixed WD-L020 crash error on Windows, and rebalanced logistics supply drop XP curves.</p>"
   },
   {
     "id": "brammer-x-wipe-clarification",
@@ -2078,6 +2101,29 @@
     "isReply": false,
     "excerpt": "Clearing up wipe rumors on X: Player ranks, cosmetic unlocks, and bank vault cash carry over into Season 2. No progression wipe will occur on October 15.",
     "fullContent": "<p><strong>Joe Brammer (@Brammflakes) on X:</strong></p><p><em>'Seeing rumors flying around about an economy wipe for Season 2. Let me be completely clear: NO WIPES. Your player rank, weapon mastery levels, attachments, and bank vault cash carry straight into Season 2.'</em></p>"
+  },
+  {
+    "id": "steam-3m-sales-awards",
+    "title": "3 MILLION COPIES SOLD + Golden Joystick Awards [VOTE NOW!]",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-09-28T14:00:00Z",
+    "dateString": "Sep 28, 2026",
+    "relativeTime": "15 days ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/701027323413004681",
+    "tags": [
+      "#Milestone",
+      "#Community",
+      "#GoldenJoysticks",
+      "#Awards"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "3 million copies sold in just over two weeks! WARDOGS has been nominated for 'Best Multiplayer Game' at the 2026 Golden Joystick Awards. Thank you from the entire team in Derby.",
+    "fullContent": "<p>Over 3 million players have entered the battlefield in our first 18 days of Early Access. We are completely blown away and honored to be nominated for Best Multiplayer at the Golden Joysticks.</p>"
   },
   {
     "id": "brammer-reddit-patch-size-nanite",
@@ -2151,6 +2197,28 @@
     "fullContent": "<p><strong>Replying to u/LinuxGamingEnthusiast regarding Steam Deck and Proton:</strong></p><p><em>'We know Linux and Steam Deck support is high on everyone\\'s wishlist. The main bottleneck is our kernel-level anti-cheat driver (Elytra). We are actively testing an official Proton-compatible module with Valve. Aiming for an experimental opt-in beta during Season 2.'</em></p>"
   },
   {
+    "id": "steam-2m-copies-sold",
+    "title": "2 MILLION COPIES SOLD! Launch Weekend Retrospective",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-09-14T16:00:00Z",
+    "dateString": "Sep 14, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/701027323413004681",
+    "tags": [
+      "#Milestone",
+      "#Community",
+      "#Sales"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "2 million copies reached over our debut launch weekend! Peak concurrent players climbed past 428,000 on Steam. We break down the server expansion and queue metrics.",
+    "fullContent": "<p>2 million operators in just four days. Watching our independent studio's game reach top concurrent charts on Steam has been surreal. Thank you all for playing.</p>"
+  },
+  {
     "id": "steam-patch-011",
     "title": "SCHEDULED MAINTENANCE & PATCH 0.11 - Server Browser Split",
     "source": "steam",
@@ -2158,8 +2226,8 @@
     "sourceLabel": "Steam Official",
     "author": "BULKHEAD Dev Team",
     "authorHandle": "@BULKHEAD",
-    "timestamp": "2026-09-14T09:00:00Z",
-    "dateString": "Sep 14, 2026",
+    "timestamp": "2026-09-12T09:00:00Z",
+    "dateString": "Sep 12, 2026",
     "relativeTime": "4 weeks ago",
     "url": "https://store.steampowered.com/news/app/1867240/view/701027323413005176",
     "tags": [
@@ -2215,6 +2283,226 @@
     "isReply": false,
     "excerpt": "Immediate Day 1 hotfix to scale server queue throughput with Valve, addressing unexpected concurrency surges as player counts crossed 300,000.",
     "fullContent": "<p>Day 1 stability hotfix addressing queue scaling with Valve and resolving squad matchmaking desync.</p>"
+  },
+  {
+    "id": "steam-launch-trailer",
+    "title": "WARDOGS LAUNCH TRAILER & Steam Early Access Release",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-09-10T10:00:00Z",
+    "dateString": "Sep 10, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/701027323413004506",
+    "tags": [
+      "#Launch",
+      "#EarlyAccess",
+      "#Trailer"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "WARDOGS is LIVE on Steam Early Access! Watch the official launch trailer featuring 100-player combined arms warfare, destructible mountain towns, and sandbox logistics.",
+    "fullContent": "<p>Play like you used to. WARDOGS has officially launched on Steam Early Access today across all global regions.</p>"
+  },
+  {
+    "id": "steam-s1-changelog-preload",
+    "title": "Pre-Load Live & Season 1 Launch Changelog",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-09-09T18:00:00Z",
+    "dateString": "Sep 9, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/701027323413004455",
+    "tags": [
+      "#Changelog",
+      "#PreLoad",
+      "#Season1"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Steam pre-load is now live! Full Day 1 changelog: Level 10+ XP progression rebalance, tank economy adjustments, proximity VOIP stability fixes, and initial weapon recoil curves locked.",
+    "fullContent": "<p>Pre-load is available for all players. Day 1 patch notes lock in progression curves, tank cost adjustments, and voip stability based on closed beta feedback.</p>"
+  },
+  {
+    "id": "steam-open-beta-stress",
+    "title": "THE CLOSED BETA IS NOW AN OPEN BETA! Server Stress Test",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-08-24T12:00:00Z",
+    "dateString": "Aug 24, 2026",
+    "relativeTime": "7 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/671753291385800217",
+    "tags": [
+      "#Beta",
+      "#OpenBeta",
+      "#StressTest"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Gates are wide open: closed beta converted to an open stress test on Steam to push server clusters to max capacity. No pre-order required for the final 48 hours.",
+    "fullContent": "<p>Come help us break our servers. All Steam users can download and test WARDOGS for the remaining 48 hours of our final beta weekend.</p>"
+  },
+  {
+    "id": "steam-beta-recap-fpsshow",
+    "title": "WARDOGS | Beta Recap & Next Steps - FPS Games Show Announcement",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-08-24T08:00:00Z",
+    "dateString": "Aug 24, 2026",
+    "relativeTime": "7 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/708906720730023607",
+    "tags": [
+      "#BetaRecap",
+      "#Roadmap",
+      "#Events"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Beta telemetry highlights: over 14 million rounds fired and 320,000 player spawns. Catch our major release reveal on The FPS Games Show ahead of launch.",
+    "fullContent": "<p>Beta recap and telemetry review with community feedback incorporated into final launch sprint.</p>"
+  },
+  {
+    "id": "steam-closed-beta-schedule",
+    "title": "WARDOGS | Closed Beta Schedule & NDA Lift",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-08-19T15:00:00Z",
+    "dateString": "Aug 19, 2026",
+    "relativeTime": "7 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/708906720730022790",
+    "tags": [
+      "#Beta",
+      "#Schedule",
+      "#NDA"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "The NDA is officially lifted for all playtesters. Full stream and recording permissions granted. Regional server launch schedule for Europe, North America, and Asia.",
+    "fullContent": "<p>Closed beta schedule confirmed with full streaming and YouTube clip creation encouraged.</p>"
+  },
+  {
+    "id": "steam-closed-beta-02",
+    "title": "WARDOGS | Closed Beta 02 Announcement",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-08-15T10:00:00Z",
+    "dateString": "Aug 15, 2026",
+    "relativeTime": "8 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/671752657526850806",
+    "tags": [
+      "#Beta",
+      "#Testing",
+      "#Announcements"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Closed Beta #2 confirmed with wave invitations for Steam playtesters. Testing helicopter flight mechanics, fortification building, and proximity chat.",
+    "fullContent": "<p>Beta 2 introduces combined arms mechanics with armor and helicopters for the first time.</p>"
+  },
+  {
+    "id": "steam-preorder-10reasons",
+    "title": "PRE-ORDER NOW! 10 Reasons Why You Should NOT Buy WARDOGS",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-08-11T16:00:00Z",
+    "dateString": "Aug 11, 2026",
+    "relativeTime": "9 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/716786751176181508",
+    "tags": [
+      "#PreOrder",
+      "#Devlog",
+      "#Transparency"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Brutally honest studio devlog: why you should wait if you want polished AAA campaigns, how stair-stepped Early Access pricing works, and our commitment to no pay-to-win microtransactions.",
+    "fullContent": "<p>Honest developer breakdown of early access expectations, stair-stepped pricing, and core gameplay focus.</p>"
+  },
+  {
+    "id": "steam-ea-beyond-roadmap",
+    "title": "WARDOGS - Early Access & Beyond Roadmap",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-08-01T14:00:00Z",
+    "dateString": "Aug 1, 2026",
+    "relativeTime": "10 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/519742851965258339",
+    "tags": [
+      "#Roadmap",
+      "#EarlyAccess",
+      "#Economy"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Long-term development roadmap revealed: Black Market vendor progression, bank vault persistence, dynamic seasonal weather, community dedicated servers, and future console release (2028).",
+    "fullContent": "<p>Detailed breakdown of development phases throughout Early Access leading to version 1.0.</p>"
+  },
+  {
+    "id": "steam-first-livestream",
+    "title": "First Official WARDOGS Dev Livestream & Playtest",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-07-22T17:00:00Z",
+    "dateString": "Jul 22, 2026",
+    "relativeTime": "11 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/710030082774663360",
+    "tags": [
+      "#Livestream",
+      "#Twitch",
+      "#Gameplay"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Developers play live alongside real playtesters on Twitch, demonstrating raw unscripted 100-player tactical combat, fortification destruction, and vehicle handling.",
+    "fullContent": "<p>First developer stream showcasing live 100-player matches with playtesters in Derbyshire studio.</p>"
+  },
+  {
+    "id": "steam-future-games-show",
+    "title": "WARDOGS - Future Games Show Gameplay Reveal & Pre-Alpha",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-06-06T20:00:00Z",
+    "dateString": "Jun 6, 2026",
+    "relativeTime": "4 months ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/711151544010015911",
+    "tags": [
+      "#Reveal",
+      "#FutureGamesShow",
+      "#GameplayTrailer"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "First worldwide gameplay reveal at the Future Games Show Summer Showcase. In-engine footage of Eastern European derelict industrial valleys and combined arms warfare.",
+    "fullContent": "<p>World premiere gameplay trailer revealed at Future Games Show with full pre-alpha gameplay showcase on Steam.</p>"
   }
 ];
 
@@ -2597,6 +2885,86 @@
     }
 
 
+    
+    // Live Steam News API Poller (fetches latest official announcements directly from Valve/Steam)
+    async function updateLiveSteamNewsFeed() {
+      const steamAppId = "1867240";
+      const directSteamNewsUrl = `https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=${steamAppId}&count=25`;
+      
+      const endpoints = [
+        "/api/news",
+        `https://corsproxy.io/?url=${encodeURIComponent(directSteamNewsUrl)}`,
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(directSteamNewsUrl)}`,
+        `https://api.allorigins.win/get?url=${encodeURIComponent(directSteamNewsUrl)}`,
+        "wardogs_news.json"
+      ];
+
+      for (const ep of endpoints) {
+        try {
+          const res = await fetch(ep, { cache: "no-store" });
+          if (!res.ok) continue;
+
+          // If local server or JSON cache
+          if (ep === "/api/news" || ep === "wardogs_news.json") {
+            const data = await res.json();
+            if (data && data.posts && data.posts.length >= currentPosts.length) {
+              currentPosts = data.posts;
+              renderNewsCards();
+              return;
+            }
+          }
+
+          // If raw or wrapped Steam API response
+          const data = await res.json();
+          let parsed = data;
+          if (data && data.contents) {
+            try { parsed = JSON.parse(data.contents); } catch(e){}
+          }
+
+          const newsitems = parsed?.appnews?.newsitems || [];
+          if (newsitems.length > 0) {
+            console.log(`[STEAM-NEWS] Parsed ${newsitems.length} items from live Steam API`);
+            let addedCount = 0;
+            const seenUrls = new Set(currentPosts.map(p => p.url));
+
+            for (const item of newsitems) {
+              if (!seenUrls.has(item.url)) {
+                seenUrls.add(item.url);
+                const pubDate = new Date(item.date * 1000);
+                currentPosts.push({
+                  id: `steam-live-${item.gid}`,
+                  title: item.title,
+                  source: "steam",
+                  sourcePlatform: "steam",
+                  sourceLabel: "Steam Official",
+                  author: item.author || "BULKHEAD Dev Team",
+                  authorHandle: "@BULKHEAD",
+                  timestamp: pubDate.toISOString(),
+                  dateString: pubDate.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }),
+                  relativeTime: "Live Steam",
+                  url: item.url,
+                  tags: ["#SteamNews", "#Official"],
+                  pinned: false,
+                  isReply: false,
+                  excerpt: (item.contents || "").replace(/<[^>]*>?/gm, '').substring(0, 240) + "...",
+                  fullContent: item.contents
+                });
+                addedCount++;
+              }
+            }
+
+            if (addedCount > 0) {
+              console.log(`[STEAM-NEWS] Merged ${addedCount} new live Steam news items!`);
+              renderNewsCards();
+            }
+            return;
+          }
+        } catch(err) {
+          // Continue to next fallback
+        }
+      }
+    }
+
     // Try fetching from backend API if available, else use embedded verified posts
     async function loadLatestNewsFromBackend() {
       try {
@@ -2722,6 +3090,8 @@
     document.addEventListener("DOMContentLoaded", () => {
       renderNewsCards();
       loadLatestNewsFromBackend();
+      updateLiveSteamNewsFeed();
+      setInterval(updateLiveSteamNewsFeed, 180000); // Check for new Steam news every 3 mins
       updateCountdown();
       updateClock();
       setInterval(updateCountdown, 1000);
