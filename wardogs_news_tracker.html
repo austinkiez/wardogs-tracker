@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WARDOGS // Tactical News & Dev Social Scraper</title>
+  <title>WARDOGS // Tactical News & Dev Social Scraper (feat. Joe Brammer)</title>
   <style>
     :root {
       --bg-base: #0a0d12;
@@ -1193,7 +1193,7 @@
         <span>BULKHEAD DEV INTEL // RADAR ACTIVE</span>
       </div>
       <div class="status-item">
-        <span>LIVE PLAYERS: <strong style="color: #34d399;">98,765 ONLINE</strong></span>
+        <span>LIVE PLAYERS: <strong id="top-bar-player-count" style="color: #34d399;">98,765 ONLINE</strong></span>
       </div>
       <div class="status-item">
         <span>REVIEWS: <strong style="color: #38bdf8;">MOSTLY POSITIVE (79%)</strong></span>
@@ -1233,45 +1233,7 @@
       <!-- Aligned 3-Card Telemetry & Countdown Matrix -->
       <div class="header-widgets-grid">
         
-        <!-- Card 1: Live Player Count -->
-        <a href="https://steamdb.info/app/1867240/charts/" target="_blank" rel="noopener noreferrer" class="telemetry-card telemetry-card-players" title="View WARDOGS Live Charts on SteamDB">
-          <div class="telemetry-card-header">
-            <div class="telemetry-header-title">
-              <span class="telemetry-live-dot"></span>
-              <span>LIVE STEAM TELEMETRY</span>
-            </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#66c0f4"><path d="M12 0C5.37 0 0 5.37 0 12a12 12 0 0 0 8.87 11.58l3.66-5.23a3.5 3.5 0 0 1-1.03-2.52c0-1.85 1.44-3.37 3.27-3.48l2.64-3.79A6.01 6.01 0 0 0 12 6a6 6 0 0 0-6 6c0 .7.12 1.37.34 2L.92 16.3A11.96 11.96 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>
-          </div>
-          <div class="telemetry-main-metric">
-            <div class="telemetry-big-number">98,765</div>
-            <span style="font-size: 0.8rem; font-weight: 600; color: #34d399; font-family: var(--font-mono);">PLAYERS ONLINE</span>
-          </div>
-          <div class="telemetry-sub-metric">
-            <span>24h Peak: 142,390 • All-Time: <strong>428,666</strong></span>
-            <svg class="telemetry-ext-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </div>
-        </a>
-
-        <!-- Card 2: Steam Review Status -->
-        <a href="https://store.steampowered.com/app/1867240/WARDOGS/" target="_blank" rel="noopener noreferrer" class="telemetry-card telemetry-card-reviews" title="View WARDOGS Reviews on Steam">
-          <div class="telemetry-card-header">
-            <div class="telemetry-header-title">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="#10b981"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-              <span>OVERALL REVIEW STATUS</span>
-            </div>
-            <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">STEAM RATINGS</span>
-          </div>
-          <div class="telemetry-main-metric">
-            <div class="telemetry-badge-review">MOSTLY POSITIVE</div>
-            <span class="telemetry-percentage">79%</span>
-          </div>
-          <div class="telemetry-sub-metric">
-            <span>Based on <strong>66,938+ Steam Reviews</strong></span>
-            <svg class="telemetry-ext-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </div>
-        </a>
-
-        <!-- Card 3: Season 2 Countdown Widget (Aligned) -->
+        <!-- Card 1: Season 2 Countdown Widget (FAR LEFT) -->
         <div class="telemetry-card telemetry-card-countdown" title="Season 2 Deployment Window">
           <div class="telemetry-card-header">
             <div class="telemetry-header-title" style="color: var(--accent-amber);">
@@ -1291,11 +1253,11 @@
                 <div class="timer-lbl">Hours</div>
               </div>
               <div class="timer-segment-aligned">
-                <div class="timer-num" id="cd-mins">40</div>
+                <div class="timer-num" id="cd-mins">26</div>
                 <div class="timer-lbl">Mins</div>
               </div>
               <div class="timer-segment-aligned">
-                <div class="timer-num" id="cd-secs">15</div>
+                <div class="timer-num" id="cd-secs">50</div>
                 <div class="timer-lbl">Secs</div>
               </div>
             </div>
@@ -1305,6 +1267,47 @@
             <span style="font-size: 0.68rem; color: var(--text-dim);">Downtime ~2h</span>
           </div>
         </div>
+
+        <!-- Card 2: Live Player Count (CENTER - AUTO-SYNCED WITH STEAMDB) -->
+        <a href="https://steamdb.info/app/1867240/charts/" target="_blank" rel="noopener noreferrer" class="telemetry-card telemetry-card-players" title="View WARDOGS Live Charts on SteamDB (Auto-refreshes every 60s)">
+          <div class="telemetry-card-header">
+            <div class="telemetry-header-title">
+              <span class="telemetry-live-dot"></span>
+              <span>LIVE STEAM TELEMETRY</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.35rem;">
+              <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-green); background: rgba(16, 185, 129, 0.15); padding: 1px 5px; border-radius: 3px;" id="player-sync-status">STEAMDB SYNC</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#66c0f4"><path d="M12 0C5.37 0 0 5.37 0 12a12 12 0 0 0 8.87 11.58l3.66-5.23a3.5 3.5 0 0 1-1.03-2.52c0-1.85 1.44-3.37 3.27-3.48l2.64-3.79A6.01 6.01 0 0 0 12 6a6 6 0 0 0-6 6c0 .7.12 1.37.34 2L.92 16.3A11.96 11.96 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>
+            </div>
+          </div>
+          <div class="telemetry-main-metric">
+            <div class="telemetry-big-number" id="live-player-count">98,765</div>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #34d399; font-family: var(--font-mono);">PLAYERS ONLINE</span>
+          </div>
+          <div class="telemetry-sub-metric">
+            <span>24h Peak: <span id="peak-24h-count">142,390</span> • All-Time: <strong>428,666</strong></span>
+            <span id="player-last-checked" style="font-size: 0.68rem; color: var(--text-dim);">Live Auto-Sync</span>
+          </div>
+        </a>
+
+        <!-- Card 3: Steam Review Status (FAR RIGHT) -->
+        <a href="https://store.steampowered.com/app/1867240/WARDOGS/" target="_blank" rel="noopener noreferrer" class="telemetry-card telemetry-card-reviews" title="View WARDOGS Reviews on Steam">
+          <div class="telemetry-card-header">
+            <div class="telemetry-header-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#10b981"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+              <span>OVERALL REVIEW STATUS</span>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">STEAM RATINGS</span>
+          </div>
+          <div class="telemetry-main-metric">
+            <div class="telemetry-badge-review">MOSTLY POSITIVE</div>
+            <span class="telemetry-percentage">79%</span>
+          </div>
+          <div class="telemetry-sub-metric">
+            <span>Based on <strong>66,938+ Steam Reviews</strong></span>
+            <svg class="telemetry-ext-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </a>
 
       </div>
     </header>
@@ -2510,6 +2513,69 @@
       }
     });
 
+
+    // Live SteamDB / Steam Player Count Polling Engine
+    async function updateLiveSteamPlayerCount() {
+      const statusBadge = document.getElementById("player-sync-status");
+      const lastCheckedEl = document.getElementById("player-last-checked");
+      
+      // Fallback hierarchy: local API endpoint -> static JSON -> public CORS proxy to Steam API
+      const steamAppId = "1867240";
+      const directSteamUrl = `https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${steamAppId}`;
+      const corsProxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(directSteamUrl)}`;
+      
+      const endpoints = [
+        "/api/players",
+        corsProxyUrl,
+        "/api/news",
+        "wardogs_news.json"
+      ];
+
+      for (const ep of endpoints) {
+        try {
+          const res = await fetch(ep, { cache: "no-store" });
+          if (res.ok) {
+            const data = await res.json();
+            let count = null;
+            if (data.response && data.response.player_count !== undefined) {
+              count = data.response.player_count;
+            } else if (data.player_count !== undefined) {
+              count = data.player_count;
+            } else if (data.metadata && data.metadata.live_player_count) {
+              count = data.metadata.live_player_count;
+            }
+
+            if (count && count > 0) {
+              setPlayerCountDisplay(count);
+              if (lastCheckedEl) {
+                const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                lastCheckedEl.textContent = `Synced: ${nowTime}`;
+              }
+              if (statusBadge) {
+                statusBadge.textContent = "STEAMDB LIVE";
+                statusBadge.style.color = "var(--accent-green)";
+              }
+              return;
+            }
+          }
+        } catch (err) {
+          // Continue to next fallback
+        }
+      }
+    }
+
+    function setPlayerCountDisplay(num) {
+      const formatted = Number(num).toLocaleString();
+      const el = document.getElementById("live-player-count");
+      if (el) {
+        el.textContent = formatted;
+      }
+      const topBarEl = document.getElementById("top-bar-player-count");
+      if (topBarEl) {
+        topBarEl.textContent = `${formatted} ONLINE`;
+      }
+    }
+
     // Init
     document.addEventListener("DOMContentLoaded", () => {
       renderNewsCards();
@@ -2521,6 +2587,8 @@
 
       // Auto poll every 5 minutes by default
       updatePollingInterval(300);
+      updateLiveSteamPlayerCount();
+      setInterval(updateLiveSteamPlayerCount, 60000); // Live SteamDB / Steam update every 60s
     });
   </script>
 </body>
