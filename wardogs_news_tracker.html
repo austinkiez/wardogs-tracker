@@ -1,10 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data:; img-src 'self' https: data: blob:; connect-src 'self' https:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
-  <title>WARDOGS // Tactical News & Dev Social Scraper</title>
+  
+  <!-- Primary Meta Tags -->
+  <title>WARDOGS News & Updates Tracker | Patch Notes, Joe Brammer Intel & Steam Player Count</title>
+  <meta name="title" content="WARDOGS News & Updates Tracker | Patch Notes, Joe Brammer Intel & Steam Player Count">
+  <meta name="description" content="Live tactical intelligence tracker, official patch notes, and developer communications for WARDOGS (100-player tactical FPS by BULKHEAD & Team17). Real-time Steam player count, Joe Brammer Reddit and X dispatches, Discord announcements, and Season 02 countdown.">
+  <meta name="keywords" content="WARDOGS, WARDOGS news, WARDOGS patch notes, WARDOGS updates, WARDOGS game, BULKHEAD, Team17, Joe Brammer, Brammflakes, WARDOGS player count, SteamDB WARDOGS, WARDOGS Season 2, tactical FPS, 100 player FPS, WARDOGS Discord announcements, WARDOGS roadmap, WARDOGS server status">
+  <meta name="author" content="BULKHEAD // WARDOGS Community Intelligence">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#0a0d12">
+  <link rel="canonical" href="https://wardogs-tracker.vercel.app/">
+
+  <!-- Open Graph / Facebook / Discord Embeds -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://wardogs-tracker.vercel.app/">
+  <meta property="og:site_name" content="WARDOGS Intelligence Tracker">
+  <meta property="og:title" content="WARDOGS News & Updates Tracker | Patch Notes & Live Telemetry">
+  <meta property="og:description" content="Live tracker for WARDOGS: official patch notes, Steam concurrent player count, Joe Brammer Reddit & X replies, Discord alerts, and Season 02 countdown.">
+  <meta property="og:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1867240/59d4daf753bd5d982e6675f7eee363bc817c574e/header.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="WARDOGS 100-Player Tactical FPS Key Art">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter / X Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://wardogs-tracker.vercel.app/">
+  <meta name="twitter:title" content="WARDOGS News & Updates Tracker | Patch Notes & Live Player Count">
+  <meta name="twitter:description" content="Live tactical intelligence tracker for WARDOGS: patch notes, Steam concurrent player telemetry, Joe Brammer dispatches, and Season 02 deployment clock.">
+  <meta name="twitter:image" content="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1867240/59d4daf753bd5d982e6675f7eee363bc817c574e/header.jpg">
+  <meta name="twitter:site" content="@wardogs">
+  <meta name="twitter:creator" content="@Brammflakes">
+
+  <!-- Mobile & PWA Experience -->
+  <meta name="application-name" content="WARDOGS Tracker">
+  <meta name="apple-mobile-web-app-title" content="WARDOGS Tracker">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Structured Data (JSON-LD Schema.org) for Search Engine Rich Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://wardogs-tracker.vercel.app/#website",
+        "url": "https://wardogs-tracker.vercel.app/",
+        "name": "WARDOGS News & Tactical Intelligence Tracker",
+        "description": "Comprehensive developer news tracker, patch notes catalog, and live Steam telemetry dashboard for WARDOGS.",
+        "inLanguage": "en-US",
+        "publisher": {
+          "@type": "Organization",
+          "name": "BULKHEAD",
+          "url": "https://bulkhead.com"
+        }
+      },
+      {
+        "@type": "VideoGame",
+        "@id": "https://store.steampowered.com/app/1867240/WARDOGS/#game",
+        "name": "WARDOGS",
+        "description": "100-player tactical combined arms first-person shooter featuring high-fidelity destructible environments, vehicle combat, and dynamic battlefield logistics.",
+        "genre": ["Action", "Tactical First-Person Shooter", "Military Simulation", "Multiplayer FPS"],
+        "gamePlatform": ["PC (Steam)", "Windows", "Linux (Proton)"],
+        "operatingSystem": "Windows 10, Windows 11, Linux",
+        "url": "https://store.steampowered.com/app/1867240/WARDOGS/",
+        "author": {
+          "@type": "Organization",
+          "name": "BULKHEAD",
+          "url": "https://bulkhead.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Team17",
+          "url": "https://www.team17.com"
+        },
+        "sameAs": [
+          "https://store.steampowered.com/app/1867240/WARDOGS/",
+          "https://x.com/wardogs",
+          "https://x.com/WARDOGSUpdates",
+          "https://x.com/BULKHEAD",
+          "https://x.com/Brammflakes",
+          "https://www.reddit.com/r/WarDogs/",
+          "https://discord.gg/playwardogs",
+          "https://www.youtube.com/@BULKHEAD"
+        ]
+      }
+    ]
+  }
+  </script>
   <style>
     :root {
       --bg-base: #0a0d12;
