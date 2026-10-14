@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data:; img-src 'self' https: data: blob:; connect-src 'self' https:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
   <title>WARDOGS // Tactical News & Dev Social Scraper</title>
   <style>
     :root {
@@ -589,6 +590,8 @@
       overflow: hidden;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
       position: relative;
+      content-visibility: auto;
+      contain-intrinsic-size: 320px;
     }
 
     .news-card:hover {
@@ -1242,12 +1245,12 @@
   <!-- Rotating WARDOGS Store Page Background Carousel -->
   <div class="bg-wallpaper-container" id="bg-wallpaper-container">
     <div class="bg-wallpaper active" style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1867240/59d4daf753bd5d982e6675f7eee363bc817c574e/header.jpg');" title="WARDOGS Key Artwork"></div>
-    <div class="bg-wallpaper" style="background-image: url('https://team17.com/hs-fs/hubfs/WD_Screenshot_Littlebird_1_WD1.jpg');" title="Littlebird Mountain Combat"></div>
-    <div class="bg-wallpaper" style="background-image: url('https://clan.fastly.steamstatic.com/images/45973082/7debc6be03803d32c57148cf617f158fbfbdc24b.png');" title="Season 2 Dynamic Rain & Armor"></div>
-    <div class="bg-wallpaper" style="background-image: url('https://images.steamusercontent.com/ugc/15496469382899849873/706A23C1524D213850B28B4A4FA70256B886C2A3/?imw=1920&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false');" title="Industrial Valley Battlefield"></div>
-    <div class="bg-wallpaper" style="background-image: url('https://clan.fastly.steamstatic.com/images/45973082/15687fd9ac4952074dabc9ba916a2e695762a39c.png');" title="Mountain Fortress Outpost"></div>
+    <div class="bg-wallpaper" data-bg="https://team17.com/hs-fs/hubfs/WD_Screenshot_Littlebird_1_WD1.jpg" title="Littlebird Mountain Combat"></div>
+    <div class="bg-wallpaper" data-bg="https://clan.fastly.steamstatic.com/images/45973082/7debc6be03803d32c57148cf617f158fbfbdc24b.png" title="Season 2 Dynamic Rain & Armor"></div>
+    <div class="bg-wallpaper" data-bg="https://images.steamusercontent.com/ugc/15496469382899849873/706A23C1524D213850B28B4A4FA70256B886C2A3/?imw=1920&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false" title="Industrial Valley Battlefield"></div>
+    <div class="bg-wallpaper" data-bg="https://clan.fastly.steamstatic.com/images/45973082/15687fd9ac4952074dabc9ba916a2e695762a39c.png" title="Mountain Fortress Outpost"></div>
     <div class="bg-wallpaper-overlay"></div>
-    </div>
+  </div>
 
 
   <!-- Top Real-time Bar -->
@@ -2501,6 +2504,65 @@
   }
 ];
 
+    // Performance: Pre-parse timestamp into numeric milliseconds once
+    POSTS_DATA.forEach(p => {
+      p._timestampMs = p.timestamp ? Date.parse(p.timestamp) || 0 : 0;
+    });
+
+    // Security: HTML escaping for dynamic output
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    // Security: Safe URL scheme enforcement (prevents javascript:, data:, vbscript:)
+    function sanitizeUrl(url) {
+      if (!url) return "#";
+      const trimmed = String(url).trim();
+      if (/^(https?:\/\/|\/|#)/i.test(trimmed)) {
+        return trimmed;
+      }
+      return "#";
+    }
+
+    // Security: DOM-based sanitizer for rich modal intel content
+    function sanitizeHtmlContent(dirty) {
+      if (!dirty) return "";
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(dirty, "text/html");
+        const unsafeTags = ["script", "iframe", "object", "embed", "link", "style", "form", "input", "button", "meta", "base"];
+        unsafeTags.forEach(tag => {
+          doc.querySelectorAll(tag).forEach(el => el.remove());
+        });
+        doc.querySelectorAll("*").forEach(el => {
+          Array.from(el.attributes).forEach(attr => {
+            const attrName = attr.name.toLowerCase();
+            const attrVal = attr.value.toLowerCase().trim();
+            if (attrName.startsWith("on") || attrVal.startsWith("javascript:") || attrVal.startsWith("data:") || attrVal.startsWith("vbscript:")) {
+              el.removeAttribute(attr.name);
+            }
+          });
+          if (el.tagName.toLowerCase() === "a") {
+            el.setAttribute("target", "_blank");
+            el.setAttribute("rel", "noopener noreferrer");
+            const href = el.getAttribute("href") || "";
+            if (!/^(https?:\/\/|\/|#)/i.test(href.trim())) {
+              el.setAttribute("href", "#");
+            }
+          }
+        });
+        return doc.body.innerHTML;
+      } catch (e) {
+        return escapeHTML(dirty);
+      }
+    }
+
     // State
     let currentPosts = [...POSTS_DATA];
     let currentSourceFilter = "all";
@@ -2535,7 +2597,7 @@
       }
     }
 
-    // Render Cards with strict NEWEST FIRST sorting
+    // Render Cards with strict NEWEST FIRST sorting & optimized integer comparator
     function renderNewsCards() {
       const container = document.getElementById("news-grid");
       const label = document.getElementById("results-count-label");
@@ -2560,12 +2622,8 @@
         return true;
       });
 
-      // STRICT NEWEST FIRST CHRONOLOGICAL SORT
-      filtered.sort((a, b) => {
-        const timeA = new Date(a.timestamp).getTime();
-        const timeB = new Date(b.timestamp).getTime();
-        return timeB - timeA;
-      });
+      // Optimized integer sort (avoids reparsing date strings on every comparison)
+      filtered.sort((a, b) => (b._timestampMs || 0) - (a._timestampMs || 0));
 
       label.textContent = `SHOWING ${filtered.length} OF ${currentPosts.length} OFFICIAL UPDATES (NEWEST FIRST)`;
 
@@ -2584,30 +2642,30 @@
         <article class="news-card ${item.pinned ? 'pinned' : ''} ${item.source === 'brammer' ? 'card-brammer' : ''}">
           <div class="card-topbar">
             <div style="display: flex; align-items: center; gap: 0.4rem;">
-              <span class="source-badge source-${item.source}">
+              <span class="source-badge source-${escapeHTML(item.source)}">
                 ${getSourceIcon(item.source, item.sourcePlatform)}
-                ${item.sourceLabel}
+                ${escapeHTML(item.sourceLabel)}
               </span>
               ${item.isReply ? '<span class="reply-pill">Dev Reply</span>' : ''}
             </div>
-            <span class="card-meta-time">${item.dateString} (${item.relativeTime})</span>
+            <span class="card-meta-time">${escapeHTML(item.dateString)} (${escapeHTML(item.relativeTime)})</span>
           </div>
           <div class="card-body">
             <div class="card-author">
               <span class="dev-badge-icon">★</span>
               <span>AUTHOR:</span>
-              <span class="card-author-name">${item.author}</span>
-              <span style="color: ${item.source === 'brammer' ? '#c084fc' : 'var(--text-dim)'}">(${item.authorHandle})</span>
+              <span class="card-author-name">${escapeHTML(item.author)}</span>
+              <span style="color: ${item.source === 'brammer' ? '#c084fc' : 'var(--text-dim)'}">(${escapeHTML(item.authorHandle)})</span>
             </div>
-            <h2 class="card-title">${item.title}</h2>
-            <p class="card-excerpt">${item.excerpt}</p>
+            <h2 class="card-title">${escapeHTML(item.title)}</h2>
+            <p class="card-excerpt">${escapeHTML(item.excerpt)}</p>
             <div class="card-tags">
-              ${(item.tags || []).map(t => `<span class="news-tag">${t}</span>`).join('')}
+              ${(item.tags || []).map(t => `<span class="news-tag">${escapeHTML(t)}</span>`).join('')}
             </div>
           </div>
           <div class="card-footer">
-            <button class="quick-read-btn" onclick="openPostModal('${item.id}')">Read Full Intel</button>
-            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-direct-btn">
+            <button class="quick-read-btn" data-post-id="${escapeHTML(item.id)}" onclick="openPostModal(this.getAttribute('data-post-id'))">Read Full Intel</button>
+            <a href="${sanitizeUrl(item.url)}" target="_blank" rel="noopener noreferrer" class="link-direct-btn">
               <span>View Source Post</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
             </a>
@@ -2616,27 +2674,27 @@
       `).join('');
     }
 
-    // Modal Details
+    // Modal Details (Sanitized with safe DOM binding)
     function openPostModal(id) {
       const item = currentPosts.find(p => p.id === id);
       if (!item) return;
 
       document.getElementById("modal-badge-container").innerHTML = `
-        <span class="source-badge source-${item.source}">
+        <span class="source-badge source-${escapeHTML(item.source)}">
           ${getSourceIcon(item.source, item.sourcePlatform)}
-          ${item.sourceLabel}
+          ${escapeHTML(item.sourceLabel)}
         </span>
         ${item.isReply ? '<span class="reply-pill" style="margin-left: 0.5rem;">Dev Reply / Comment</span>' : ''}
       `;
       document.getElementById("modal-title").textContent = item.title;
       document.getElementById("modal-meta").innerHTML = `
-        OFFICIAL DEVELOPER: <strong>${item.author}</strong> (${item.authorHandle}) • PUBLISHED: ${item.dateString} (${item.relativeTime})
+        OFFICIAL DEVELOPER: <strong>${escapeHTML(item.author)}</strong> (${escapeHTML(item.authorHandle)}) • PUBLISHED: ${escapeHTML(item.dateString)} (${escapeHTML(item.relativeTime)})
       `;
-      document.getElementById("modal-body").innerHTML = item.fullContent || `<p>${item.excerpt}</p>`;
+      document.getElementById("modal-body").innerHTML = item.fullContent ? sanitizeHtmlContent(item.fullContent) : `<p>${escapeHTML(item.excerpt)}</p>`;
       
       const extLink = document.getElementById("modal-external-link");
-      extLink.href = item.url;
-      extLink.querySelector("span").textContent = `View Original on ${item.sourceLabel}`;
+      extLink.href = sanitizeUrl(item.url);
+      extLink.querySelector("span").textContent = `View Original on ${escapeHTML(item.sourceLabel)}`;
 
       document.getElementById("detail-modal").style.display = "flex";
       document.body.style.overflow = "hidden";
@@ -2666,10 +2724,14 @@
       renderNewsCards();
     }
 
-    // Search query
+    // Search query (debounced at 120ms to eliminate UI stutter and repeated re-renders)
+    let searchDebounceTimer = null;
     function handleSearchFilter() {
-      searchQuery = document.getElementById("search-input").value;
-      renderNewsCards();
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        searchQuery = document.getElementById("search-input").value;
+        renderNewsCards();
+      }, 120);
     }
 
     function resetFilters() {
@@ -2807,20 +2869,71 @@
       if (!wallpapers || wallpapers.length <= 1) return;
       wallpapers[currentWallpaperIdx].classList.remove("active");
       currentWallpaperIdx = (currentWallpaperIdx + 1) % wallpapers.length;
-      wallpapers[currentWallpaperIdx].classList.add("active");
+      const nextWp = wallpapers[currentWallpaperIdx];
+      if (nextWp.dataset.bg && !nextWp.style.backgroundImage) {
+        nextWp.style.backgroundImage = `url('${nextWp.dataset.bg}')`;
+      }
+      nextWp.classList.add("active");
 
+      // Preload next upcoming wallpaper
+      const upcomingIdx = (currentWallpaperIdx + 1) % wallpapers.length;
+      const upcomingWp = wallpapers[upcomingIdx];
+      if (upcomingWp && upcomingWp.dataset.bg && !upcomingWp.style.backgroundImage) {
+        const img = new Image();
+        img.src = upcomingWp.dataset.bg;
+        img.onload = () => { upcomingWp.style.backgroundImage = `url('${upcomingWp.dataset.bg}')`; };
+      }
+    }
 
+    // Lazy preload remaining wallpapers in background during browser idle time
+    function preloadRemainingWallpapers() {
+      const wallpapers = document.querySelectorAll(".bg-wallpaper[data-bg]");
+      let delay = 1200;
+      wallpapers.forEach((wp, idx) => {
+        setTimeout(() => {
+          if (wp.dataset.bg && !wp.style.backgroundImage) {
+            const img = new Image();
+            img.src = wp.dataset.bg;
+            img.onload = () => { wp.style.backgroundImage = `url('${wp.dataset.bg}')`; };
+          }
+        }, delay + idx * 1000);
+      });
     }
 
     // Countdown to Season 2 (Timezone-dependent based on user's current local timezone)
+    const TARGET_SEASON2_UTC = new Date("2026-10-15T07:00:00Z");
+    let staticCountdownFormatted = false;
+
+    function initCountdownStaticLabels() {
+      if (staticCountdownFormatted) return;
+      const localDateStr = TARGET_SEASON2_UTC.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      const localTimeStr = TARGET_SEASON2_UTC.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+      const userTzName = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local";
+
+      const targetEl = document.getElementById("countdown-target-local");
+      if (targetEl) {
+        targetEl.innerHTML = `Target: <strong>${escapeHTML(localDateStr)} // ${escapeHTML(localTimeStr)}</strong>`;
+      }
+      const badgeEl = document.getElementById("cd-local-tz-badge");
+      if (badgeEl) {
+        const tzAbbr = localTimeStr.split(" ").slice(-1)[0] || "LOCAL";
+        badgeEl.textContent = `${tzAbbr}`;
+      }
+      const tzNameEl = document.getElementById("countdown-tz-name");
+      if (tzNameEl) {
+        tzNameEl.textContent = `${userTzName}`;
+      }
+      staticCountdownFormatted = true;
+    }
+
     function updateCountdown() {
-      // 07:00 UTC on October 15, 2026 (exact epoch moment worldwide)
-      const targetTimeUtc = new Date("2026-10-15T07:00:00Z");
+      initCountdownStaticLabels();
       const now = new Date();
-      const diff = targetTimeUtc.getTime() - now.getTime();
+      const diff = TARGET_SEASON2_UTC.getTime() - now.getTime();
 
       if (diff <= 0) {
-        document.getElementById("countdown-timer").innerHTML = "<div style='color: var(--accent-amber); font-weight: 700; padding: 4px 0;'>SEASON 2 DEPLOYED!</div>";
+        const timerEl = document.getElementById("countdown-timer");
+        if (timerEl) timerEl.innerHTML = "<div style='color: var(--accent-amber); font-weight: 700; padding: 4px 0;'>SEASON 2 DEPLOYED!</div>";
         return;
       }
 
@@ -2838,25 +2951,6 @@
       if (hEl) hEl.textContent = String(hours).padStart(2, '0');
       if (mEl) mEl.textContent = String(mins).padStart(2, '0');
       if (sEl) sEl.textContent = String(secs).padStart(2, '0');
-
-      // User's Local Timezone Formatting
-      const localDateStr = targetTimeUtc.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-      const localTimeStr = targetTimeUtc.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
-      const userTzName = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local";
-
-      const targetEl = document.getElementById("countdown-target-local");
-      if (targetEl) {
-        targetEl.innerHTML = `Target: <strong>${localDateStr} // ${localTimeStr}</strong>`;
-      }
-      const badgeEl = document.getElementById("cd-local-tz-badge");
-      if (badgeEl) {
-        const tzAbbr = localTimeStr.split(" ").slice(-1)[0] || "LOCAL";
-        badgeEl.textContent = `${tzAbbr}`;
-      }
-      const tzNameEl = document.getElementById("countdown-tz-name");
-      if (tzNameEl) {
-        tzNameEl.textContent = `${userTzName}`;
-      }
     }
 
     // User's Local Clock in Top Status Bar
@@ -2865,8 +2959,14 @@
       const localTime = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' });
       const el = document.getElementById("utc-clock");
       if (el) {
-        el.innerHTML = `<span>LOCAL TIME: <strong>${localTime}</strong></span>`;
+        el.innerHTML = `<span>LOCAL TIME: <strong>${escapeHTML(localTime)}</strong></span>`;
       }
+    }
+
+    // Unified Master Ticker (single interval prevents competing DOM cycles)
+    function masterTick() {
+      updateCountdown();
+      updateClock();
     }
 
 
@@ -2932,7 +3032,8 @@
                   pinned: false,
                   isReply: false,
                   excerpt: (item.contents || "").replace(/<[^>]*>?/gm, '').substring(0, 240) + "...",
-                  fullContent: item.contents
+                  fullContent: item.contents,
+                  _timestampMs: pubDate.getTime()
                 });
                 addedCount++;
               }
@@ -3113,11 +3214,10 @@
       loadLatestNewsFromBackend();
       updateLiveSteamNewsFeed();
       setInterval(updateLiveSteamNewsFeed, 180000); // Check for new Steam news every 3 mins
-      updateCountdown();
-      updateClock();
-      setInterval(updateCountdown, 1000);
-      setInterval(updateClock, 1000);
+      masterTick();
+      setInterval(masterTick, 1000); // Unified 1-second ticker for clock & countdown
       setInterval(rotateBackgroundWallpaper, 10000); // Rotate store wallpapers every 10s
+      preloadRemainingWallpapers(); // Asynchronously lazy-preload backgrounds in idle
 
       // Auto poll every 5 minutes by default
       updatePollingInterval(300);

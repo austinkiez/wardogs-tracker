@@ -10,6 +10,8 @@ and indexes the complete catalog of Steam announcements, changelogs, and hotfixe
 """
 
 import json
+import os
+import hashlib
 import time
 import datetime
 import urllib.request
@@ -120,8 +122,9 @@ def fetch_steam_rss():
                     link = item.findtext("link", "")
                     description = item.findtext("description", "")
                     pub_date = item.findtext("pubDate", "")
+                    link_hash = hashlib.sha256(link.encode("utf-8")).hexdigest()[:12]
                     items.append({
-                        "id": f"steam-rss-{hash(link)}",
+                        "id": f"steam-rss-{link_hash}",
                         "title": title,
                         "source": "steam",
                         "sourcePlatform": "steam",
@@ -153,9 +156,16 @@ def fetch_brammflakes_x():
         with urllib.request.urlopen(req, timeout=10) as response:
             raw_html = response.read().decode("utf-8")
             if "__NEXT_DATA__" in raw_html:
-                start = raw_html.find('<script id="__NEXT_DATA__" type="application/json">') + len('<script id="__NEXT_DATA__" type="application/json">')
-                end = raw_html.find('</script>', start)
-                next_data = json.loads(raw_html[start:end])
+                tag_marker = '<script id="__NEXT_DATA__" type="application/json">'
+                start = raw_html.find(tag_marker)
+                if start != -1:
+                    start += len(tag_marker)
+                    end = raw_html.find('</script>', start)
+                    if end != -1:
+                        try:
+                            next_data = json.loads(raw_html[start:end])
+                        except Exception:
+                            next_data = {}
                 timeline = next_data.get("props", {}).get("pageProps", {}).get("timeline", {}).get("entries", [])
                 for entry in timeline:
                     tweet = entry.get("content", {}).get("tweet", {})
@@ -266,8 +276,11 @@ def run_scraper_cycle():
         "posts": combined_posts
     }
 
-    with open(OUTPUT_JSON_PATH, "w", encoding="utf-8") as f:
+    # Atomic write pattern to prevent corrupting database if process is interrupted
+    temp_path = OUTPUT_JSON_PATH.with_suffix(".tmp")
+    with open(temp_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2)
+    os.replace(temp_path, OUTPUT_JSON_PATH)
 
     print(f"[SCRAPER] Successfully updated {OUTPUT_JSON_PATH} with {len(combined_posts)} posts (newest first).")
     print(f"[SCRAPER] Steam News total: {steam_count} announcements/patches. Brammer total: {brammer_count}.")
