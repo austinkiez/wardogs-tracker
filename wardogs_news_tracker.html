@@ -606,6 +606,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
 
@@ -665,21 +666,29 @@
     }
 
     .reply-pill {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       font-size: 0.65rem;
       font-family: var(--font-mono);
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.09);
       color: #cbd5e1;
-      padding: 1px 6px;
+      padding: 2px 7px;
       border-radius: 3px;
-      margin-left: 0.4rem;
+      margin-left: 0.5rem;
+      margin-right: 0.75rem;
+      white-space: nowrap;
       text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .card-meta-time {
       font-family: var(--font-mono);
       font-size: 0.72rem;
       color: var(--text-dim);
+      margin-left: auto;
+      padding-left: 0.75rem;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .card-body {
@@ -1226,45 +1235,7 @@
       pointer-events: none;
     }
 
-    .wallpaper-control-pill {
-      position: fixed;
-      bottom: 12px;
-      right: 16px;
-      z-index: 100;
-      background: rgba(10, 13, 18, 0.85);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: var(--text-dim);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      backdrop-filter: blur(4px);
-    }
-
-    .wallpaper-next-btn {
-      background: transparent;
-      border: none;
-      color: var(--accent-amber);
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 0 4px;
-    }
-
-    .wallpaper-next-btn:hover {
-      color: #fff;
-    }
-
-    .pulse-ring-amber {
-      width: 6px;
-      height: 6px;
-      background: var(--accent-amber);
-      border-radius: 50%;
-      box-shadow: 0 0 6px var(--accent-amber);
-    }
+    
 
   </style>
 </head>
@@ -1277,12 +1248,7 @@
     <div class="bg-wallpaper" style="background-image: url('https://images.steamusercontent.com/ugc/15496469382899849873/706A23C1524D213850B28B4A4FA70256B886C2A3/?imw=1920&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false');" title="Industrial Valley Battlefield"></div>
     <div class="bg-wallpaper" style="background-image: url('https://clan.fastly.steamstatic.com/images/45973082/15687fd9ac4952074dabc9ba916a2e695762a39c.png');" title="Mountain Fortress Outpost"></div>
     <div class="bg-wallpaper-overlay"></div>
-    <div class="wallpaper-control-pill">
-      <span class="pulse-ring-amber"></span>
-      <span id="wallpaper-caption">WARDOGS STOREFRONT CAPTURES (ROTATING)</span>
-      <button onclick="rotateBackgroundWallpaper()" class="wallpaper-next-btn" title="Next Wallpaper">❯</button>
     </div>
-  </div>
 
 
   <!-- Top Real-time Bar -->
@@ -2570,10 +2536,7 @@
       currentWallpaperIdx = (currentWallpaperIdx + 1) % wallpapers.length;
       wallpapers[currentWallpaperIdx].classList.add("active");
 
-      const captionEl = document.getElementById("wallpaper-caption");
-      if (captionEl) {
-        captionEl.textContent = `STORE CAPTURE ${WALLPAPER_TITLES[currentWallpaperIdx] || ""}`;
-      }
+
     }
 
     // Countdown to Season 2 (Timezone-dependent based on user's current local timezone)
