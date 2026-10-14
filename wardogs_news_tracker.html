@@ -1012,25 +1012,24 @@
       }
     }
   
-    /* Header Telemetry & Status Widgets */
+    /* Header Telemetry & Status Widgets - Perfectly Aligned 3-Card Grid */
     .header-widgets-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
       align-items: stretch;
-      margin-top: 1.25rem;
+      margin-top: 1.5rem;
     }
 
     .telemetry-card {
       background: rgba(10, 13, 18, 0.9);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 0.9rem 1.25rem;
+      padding: 1.1rem 1.25rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-width: 250px;
-      flex: 1;
+      min-height: 140px;
       text-decoration: none;
       transition: all 0.2s ease;
       position: relative;
@@ -1040,7 +1039,7 @@
     .telemetry-card:hover {
       border-color: var(--accent-amber);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
 
     .telemetry-card-players {
@@ -1051,11 +1050,16 @@
       border-left: 3px solid var(--accent-cyan);
     }
 
+    .telemetry-card-countdown {
+      border-left: 3px solid var(--accent-amber);
+      cursor: default;
+    }
+
     .telemetry-card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
 
     .telemetry-header-title {
@@ -1080,14 +1084,15 @@
 
     .telemetry-main-metric {
       display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      margin-bottom: 0.2rem;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.35rem;
+      flex: 1;
     }
 
     .telemetry-big-number {
       font-family: var(--font-mono);
-      font-size: 1.75rem;
+      font-size: 1.85rem;
       font-weight: 800;
       color: #ffffff;
       line-height: 1;
@@ -1096,7 +1101,7 @@
 
     .telemetry-badge-review {
       font-family: var(--font-sans);
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #34d399;
       letter-spacing: 0.02em;
@@ -1104,12 +1109,42 @@
 
     .telemetry-percentage {
       font-family: var(--font-mono);
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 700;
       color: #6ee7b7;
       background: rgba(16, 185, 129, 0.15);
-      padding: 1px 6px;
+      padding: 2px 7px;
       border-radius: 3px;
+    }
+
+    .countdown-timer-aligned {
+      display: flex;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .timer-segment-aligned {
+      background: #17212e;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 3px 7px;
+      text-align: center;
+      min-width: 48px;
+    }
+
+    .timer-segment-aligned .timer-num {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+    }
+
+    .timer-segment-aligned .timer-lbl {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .telemetry-sub-metric {
@@ -1119,9 +1154,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 0.35rem;
+      margin-top: 0.4rem;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
-      padding-top: 0.35rem;
+      padding-top: 0.4rem;
     }
 
     .telemetry-ext-link-icon {
@@ -1132,6 +1167,18 @@
     .telemetry-card:hover .telemetry-ext-link-icon {
       opacity: 1;
       color: var(--accent-amber);
+    }
+
+    @media (max-width: 1024px) {
+      .header-widgets-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-widgets-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
   </style>
@@ -1181,40 +1228,12 @@
             OFFICIAL SOURCES: Joe Brammer (Reddit u/brammflakes & X @Brammflakes) • Steam Hub • X (@wardogs, @BULKHEAD) • YouTube • Discord • GamesPress PR
           </div>
         </div>
-
-        <!-- Season 2 Countdown Widget -->
-        <div class="season-countdown-card">
-          <div class="countdown-title">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
-            Season 02 Deployment Countdown
-          </div>
-          <div class="countdown-timer" id="countdown-timer">
-            <div class="timer-segment">
-              <div class="timer-num" id="cd-days">01</div>
-              <div class="timer-lbl">Days</div>
-            </div>
-            <div class="timer-segment">
-              <div class="timer-num" id="cd-hours">10</div>
-              <div class="timer-lbl">Hours</div>
-            </div>
-            <div class="timer-segment">
-              <div class="timer-num" id="cd-mins">43</div>
-              <div class="timer-lbl">Mins</div>
-            </div>
-            <div class="timer-segment">
-              <div class="timer-num" id="cd-secs">20</div>
-              <div class="timer-lbl">Secs</div>
-            </div>
-          </div>
-          <div style="font-size: 0.68rem; color: var(--text-dim); margin-top: 0.4rem; font-family: var(--font-mono);">
-            Target: Oct 15, 2026 // 07:00 UTC Maintenance
-          </div>
-        </div>
       </div>
 
-      <!-- Live Steam Telemetry in Header: Current Player Count & Review Status -->
+      <!-- Aligned 3-Card Telemetry & Countdown Matrix -->
       <div class="header-widgets-grid">
-        <!-- Live Player Count Card -->
+        
+        <!-- Card 1: Live Player Count -->
         <a href="https://steamdb.info/app/1867240/charts/" target="_blank" rel="noopener noreferrer" class="telemetry-card telemetry-card-players" title="View WARDOGS Live Charts on SteamDB">
           <div class="telemetry-card-header">
             <div class="telemetry-header-title">
@@ -1228,12 +1247,12 @@
             <span style="font-size: 0.8rem; font-weight: 600; color: #34d399; font-family: var(--font-mono);">PLAYERS ONLINE</span>
           </div>
           <div class="telemetry-sub-metric">
-            <span>24h Peak: 142,390 • All-Time Peak: <strong>428,666</strong></span>
+            <span>24h Peak: 142,390 • All-Time: <strong>428,666</strong></span>
             <svg class="telemetry-ext-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
         </a>
 
-        <!-- Steam Review Status Card -->
+        <!-- Card 2: Steam Review Status -->
         <a href="https://store.steampowered.com/app/1867240/WARDOGS/" target="_blank" rel="noopener noreferrer" class="telemetry-card telemetry-card-reviews" title="View WARDOGS Reviews on Steam">
           <div class="telemetry-card-header">
             <div class="telemetry-header-title">
@@ -1247,10 +1266,46 @@
             <span class="telemetry-percentage">79%</span>
           </div>
           <div class="telemetry-sub-metric">
-            <span>Based on <strong>66,938+ Steam Reviews</strong> (73.4% SteamDB)</span>
+            <span>Based on <strong>66,938+ Steam Reviews</strong></span>
             <svg class="telemetry-ext-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
         </a>
+
+        <!-- Card 3: Season 2 Countdown Widget (Aligned) -->
+        <div class="telemetry-card telemetry-card-countdown" title="Season 2 Deployment Window">
+          <div class="telemetry-card-header">
+            <div class="telemetry-header-title" style="color: var(--accent-amber);">
+              <span class="telemetry-live-dot" style="background: var(--accent-amber); box-shadow: 0 0 6px var(--accent-amber);"></span>
+              <span>SEASON 02 DEPLOYMENT</span>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent-amber); font-weight: 700;">OCT 15</span>
+          </div>
+          <div class="telemetry-main-metric">
+            <div class="countdown-timer-aligned" id="countdown-timer">
+              <div class="timer-segment-aligned">
+                <div class="timer-num" id="cd-days">01</div>
+                <div class="timer-lbl">Days</div>
+              </div>
+              <div class="timer-segment-aligned">
+                <div class="timer-num" id="cd-hours">10</div>
+                <div class="timer-lbl">Hours</div>
+              </div>
+              <div class="timer-segment-aligned">
+                <div class="timer-num" id="cd-mins">40</div>
+                <div class="timer-lbl">Mins</div>
+              </div>
+              <div class="timer-segment-aligned">
+                <div class="timer-num" id="cd-secs">15</div>
+                <div class="timer-lbl">Secs</div>
+              </div>
+            </div>
+          </div>
+          <div class="telemetry-sub-metric">
+            <span>Target: <strong>Oct 15, 2026 // 07:00 UTC</strong></span>
+            <span style="font-size: 0.68rem; color: var(--text-dim);">Downtime ~2h</span>
+          </div>
+        </div>
+
       </div>
     </header>
 
