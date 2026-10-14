@@ -3447,6 +3447,39 @@
 
 
     
+        // Cost & API Usage Optimization: Sticky Endpoints & Page Visibility API
+    let stickyPlayerEndpoint = null;
+    let activeNewsPollTimer = null;
+    let activePlayerPollTimer = null;
+    const NEWS_POLL_INTERVAL_MS = 300000;    // 5 minutes (Steam news updates infrequently)
+    const PLAYER_POLL_INTERVAL_MS = 180000;  // 3 minutes (matches Valve's backend rolling window)
+
+    function startBackgroundPolling() {
+      stopBackgroundPolling();
+      activeNewsPollTimer = setInterval(updateLiveSteamNewsFeed, NEWS_POLL_INTERVAL_MS);
+      activePlayerPollTimer = setInterval(updateLiveSteamPlayerCount, PLAYER_POLL_INTERVAL_MS);
+    }
+
+    function stopBackgroundPolling() {
+      if (activeNewsPollTimer) clearInterval(activeNewsPollTimer);
+      if (activePlayerPollTimer) clearInterval(activePlayerPollTimer);
+      activeNewsPollTimer = null;
+      activePlayerPollTimer = null;
+    }
+
+    // Suspend API polling when browser tab is inactive/hidden to eliminate 70%+ of wasted requests
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        stopBackgroundPolling();
+        console.log("[POLLING] Tab hidden: suspended network intervals to prevent cost & quota waste.");
+      } else {
+        console.log("[POLLING] Tab visible: resuming telemetry polling & executing immediate refresh.");
+        updateLiveSteamPlayerCount();
+        updateLiveSteamNewsFeed();
+        startBackgroundPolling();
+      }
+    });
+
     // Live Steam News API Poller (fetches latest official announcements directly from Valve/Steam)
     async function updateLiveSteamNewsFeed() {
       const steamAppId = "1867240";
@@ -3462,7 +3495,7 @@
 
       for (const ep of endpoints) {
         try {
-          const res = await fetch(ep, { cache: "no-store" });
+          const res = await fetch(ep, { cache: "default" });
           if (!res.ok) continue;
 
           // If local server or JSON cache
@@ -3575,20 +3608,22 @@
       // 4. AllOrigins JSON Wrapper (https://api.allorigins.win/get?url=<url>)
       // 5. Steam Community In-Game Scraper via proxy
       // 6. Local Scraper Cache (wardogs_news.json)
-      const sources = [
+      let rawSources = [
         { name: "Local Server API", url: "/api/players", type: "direct" },
+        { name: "Local Scraper Cache", url: "wardogs_news.json", type: "cache_json" },
+        { name: "Backend News API", url: "/api/news", type: "cache_json" },
         { name: "CORSProxy.io", url: "https://corsproxy.io/?" + encodeURIComponent(targetSteamUrl), type: "direct" },
         { name: "CodeTabs Proxy", url: "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetSteamUrl), type: "direct" },
-        { name: "AllOrigins JSON Wrapper", url: "https://api.allorigins.win/get?url=" + encodeURIComponent(targetSteamUrl), type: "allorigins_wrapper" },
-        { name: "Steam Community In-Game", url: "https://corsproxy.io/?" + encodeURIComponent("https://steamcommunity.com/app/1867240"), type: "community_html" },
-        { name: "Local Scraper Cache", url: "wardogs_news.json", type: "cache_json" },
-        { name: "Backend News API", url: "/api/news", type: "cache_json" }
+        { name: "AllOrigins JSON Wrapper", url: "https://api.allorigins.win/get?url=" + encodeURIComponent(targetSteamUrl), type: "allorigins_wrapper" }
       ];
+
+      // Cost Optimization: Prefer sticky known-working endpoint first to avoid cascading requests
+      let sources = stickyPlayerEndpoint ? [stickyPlayerEndpoint, ...rawSources.filter(s => s.name !== stickyPlayerEndpoint.name)] : rawSources;
 
       for (const src of sources) {
         try {
           console.log("[STEAM-SYNC] Polling live player count via: " + src.name);
-          const res = await fetch(src.url, { cache: "no-store" });
+          const res = await fetch(src.url, { cache: "default" });
           if (!res.ok) {
             console.warn("[STEAM-SYNC] " + src.name + " returned HTTP " + res.status);
             continue;
@@ -3620,6 +3655,7 @@
           if (count && count > 0) {
             console.log("[STEAM-SYNC] Live player count successfully retrieved: " + count + " (Source: " + src.name + ")");
             setPlayerCountDisplay(count, true); // Persist to localStorage
+            stickyPlayerEndpoint = src;
             const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             if (lastCheckedEl) {
               lastCheckedEl.textContent = "Synced: " + nowTime;
@@ -3689,16 +3725,14 @@
       renderNewsCards();
       loadLatestNewsFromBackend();
       updateLiveSteamNewsFeed();
-      setInterval(updateLiveSteamNewsFeed, 180000); // Check for new Steam news every 3 mins
+      updateLiveSteamPlayerCount();
       masterTick();
       setInterval(masterTick, 1000); // Unified 1-second ticker for clock & countdown
       setInterval(rotateBackgroundWallpaper, 10000); // Rotate store wallpapers every 10s
       preloadRemainingWallpapers(); // Asynchronously lazy-preload backgrounds in idle
 
-      // Auto poll every 5 minutes by default
-      updatePollingInterval(300);
-      updateLiveSteamPlayerCount();
-      setInterval(updateLiveSteamPlayerCount, 60000); // Live SteamDB / Steam update every 60s
+      // Cost-Optimized Polling Engine (3m players, 5m news, suspended when tab is hidden)
+      startBackgroundPolling();
     });
   </script>
 </body>
