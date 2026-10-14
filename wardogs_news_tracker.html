@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WARDOGS // Tactical News & Dev Social Scraper (feat. Joe Brammer)</title>
+  <style>
+    :root {
+      --bg-base: #0a0d12;
+      --bg-surface: #111720;
+      --bg-surface-elevated: #16202c;
+      --bg-card: #131b24;
+      --bg-card-hover: #1a2533;
+      --border-subtle: #223042;
+      --border-accent: #f59e0b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent-amber: #f59e0b;
+      --accent-amber-glow: rgba(245, 158, 11, 0.18);
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-purple: #a855f7;
+      --accent-red: #ef4444;
+      --color-steam: #1b2838;
+      --color-steam-border: #66c0f4;
+      --color-x: #0f1419;
+      --color-x-border: #1d9bf0;
+      --color-brammer: #2e1a47;
+      --color-brammer-border: #c084fc;
+      --color-yt: #210002;
+      --color-yt-border: #ff0000;
+      --color-discord: #1a1b35;
+      --color-discord-border: #5865f2;
+      --color-reddit: #2c150c;
+      --color-reddit-border: #ff4500;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(17, 23, 32, 0.6) 0%, rgba(10, 13, 18, 0.95) 100%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 4px);
+    }
+
+    /* Top Military Ticker */
+    .top-status-bar {
+      background: #06090d;
+      border-bottom: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 6px 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    .status-items {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .radar-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse-dot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Main Container */
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* Header Section */
+    .tactical-header {
+      background: linear-gradient(135deg, rgba(22, 32, 44, 0.8) 0%, rgba(17, 23, 32, 0.9) 100%);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--accent-amber);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-title-area h1 {
+      font-family: var(--font-sans);
+      font-weight: 800;
+      font-size: 2rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-tag {
+      background: var(--accent-amber);
+      color: #000;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.1em;
+      vertical-align: middle;
+    }
+
+    .brand-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.4rem;
+      max-width: 760px;
+    }
+
+    .dev-byline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.08);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      margin-top: 0.6rem;
+    }
+
+    /* Countdown Banner */
+    .season-countdown-card {
+      background: rgba(10, 13, 18, 0.85);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+      min-width: 320px;
+    }
+
+    .countdown-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .countdown-timer {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .timer-segment {
+      background: #17212e;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      text-align: center;
+      min-width: 52px;
+    }
+
+    .timer-num {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .timer-lbl {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* Official Channels Directory */
+    .channels-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .channel-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .channel-chip:hover {
+      background: var(--bg-surface-elevated);
+      color: #fff;
+      border-color: var(--accent-amber);
+      transform: translateY(-1px);
+    }
+
+    .channel-chip.chip-dev-lead {
+      border-color: rgba(192, 132, 252, 0.4);
+      background: rgba(46, 26, 71, 0.4);
+      color: #e9d5ff;
+    }
+
+    .channel-chip.chip-dev-lead:hover {
+      border-color: #c084fc;
+      background: rgba(46, 26, 71, 0.8);
+      color: #fff;
+    }
+
+    .channel-chip svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    /* Scraper Dashboard Controls */
+    .scraper-control-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .control-row-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .control-stats {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      color: #fff;
+      font-weight: 700;
+      background: #1e293b;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+    }
+
+    .control-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-amber {
+      background: var(--accent-amber);
+      color: #0b0f14;
+    }
+
+    .btn-amber:hover {
+      background: #fbbf24;
+      box-shadow: 0 0 16px var(--accent-amber-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--text-muted);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 0.78rem;
+    }
+
+    /* Filter & Search Bar */
+    .filter-search-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 1rem;
+    }
+
+    .filter-search-top-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 520px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: #0d1219;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px 9px 36px;
+      color: #fff;
+      font-size: 0.88rem;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-amber);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--text-dim);
+    }
+
+    .source-filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .pill-btn {
+      background: #0e141c;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+
+    .pill-btn:hover {
+      border-color: var(--text-dim);
+      color: #fff;
+    }
+
+    .pill-btn.active {
+      background: #1e2b3c;
+      border-color: var(--accent-amber);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .pill-btn.pill-brammer {
+      border-color: rgba(192, 132, 252, 0.4);
+      background: rgba(46, 26, 71, 0.3);
+      color: #d8b4fe;
+    }
+
+    .pill-btn.pill-brammer.active {
+      background: #3b1d5c;
+      border-color: #c084fc;
+      color: #fff;
+    }
+
+    /* Live Scraping Progress Bar */
+    .scraper-progress-bar {
+      height: 3px;
+      background: #0f1722;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 2px;
+      display: none;
+    }
+
+    .scraper-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), #c084fc, var(--accent-amber));
+      transition: width 0.3s ease;
+    }
+
+    /* Console Drawer (Scraper Logs) */
+    .console-drawer {
+      background: #070a0e;
+      border: 1px solid #1c2633;
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #38bdf8;
+      max-height: 160px;
+      overflow-y: auto;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .console-log-entry {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .console-time {
+      color: var(--text-dim);
+    }
+
+    .console-msg-ok {
+      color: #34d399;
+    }
+
+    .console-msg-info {
+      color: #94a3b8;
+    }
+
+    .console-msg-brammer {
+      color: #c084fc;
+    }
+
+    /* News Grid Layout */
+    .news-feed-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .news-count-label {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .view-mode-toggle {
+      display: flex;
+      gap: 0.3rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+    }
+
+    .view-mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .view-mode-btn.active {
+      background: #1e293b;
+      color: var(--accent-amber);
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .news-grid.list-view {
+      grid-template-columns: 1fr;
+    }
+
+    /* Individual News Card */
+    .news-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .news-card:hover {
+      transform: translateY(-3px);
+      border-color: #33475f;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .news-card.pinned {
+      border-left: 3px solid var(--accent-amber);
+    }
+
+    .news-card.card-brammer {
+      border-top: 2px solid #a855f7;
+    }
+
+    .card-topbar {
+      padding: 0.9rem 1.1rem 0.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+    }
+
+    .source-steam {
+      background: rgba(102, 192, 244, 0.12);
+      color: #66c0f4;
+      border: 1px solid rgba(102, 192, 244, 0.3);
+    }
+
+    .source-x {
+      background: rgba(29, 155, 240, 0.12);
+      color: #38bdf8;
+      border: 1px solid rgba(29, 155, 240, 0.3);
+    }
+
+    .source-brammer {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+
+    .source-youtube {
+      background: rgba(239, 68, 68, 0.12);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .source-discord {
+      background: rgba(88, 101, 242, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(88, 101, 242, 0.3);
+    }
+
+    .source-reddit {
+      background: rgba(255, 69, 0, 0.12);
+      color: #fb923c;
+      border: 1px solid rgba(255, 69, 0, 0.3);
+    }
+
+    .source-press {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .reply-pill {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-left: 0.4rem;
+      text-transform: uppercase;
+    }
+
+    .card-meta-time {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .card-body {
+      padding: 1.1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-author {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .card-author-name {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .dev-badge-icon {
+      color: var(--accent-amber);
+      font-size: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-excerpt {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 1rem;
+    }
+
+    .news-tag {
+      background: #0d141d;
+      border: 1px solid #1f2d3d;
+      color: #94a3b8;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .card-footer {
+      padding: 0.9rem 1.1rem;
+      background: rgba(10, 14, 20, 0.6);
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .link-direct-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #172433;
+      border: 1px solid #283a4f;
+      color: #f1f5f9;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .link-direct-btn:hover {
+      background: var(--accent-amber);
+      color: #000;
+      border-color: var(--accent-amber);
+    }
+
+    .link-direct-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .quick-read-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      transition: all 0.15s;
+    }
+
+    .quick-read-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Modal Reader */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-window {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-top: 3px solid var(--accent-amber);
+      border-radius: var(--radius-lg);
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      animation: modal-enter 0.2s ease-out;
+    }
+
+    @keyframes modal-enter {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+    }
+
+    .modal-close-btn:hover {
+      color: #fff;
+      background: #1f2937;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .modal-body h3 {
+      color: #fff;
+      margin: 1.25rem 0 0.5rem;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 4px;
+    }
+
+    .modal-body ul {
+      margin-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-body li {
+      margin-bottom: 0.4rem;
+    }
+
+    .modal-body blockquote {
+      border-left: 3px solid var(--accent-amber);
+      padding-left: 1rem;
+      margin: 1rem 0;
+      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 0.5rem 1rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d131b;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    /* Custom Feed / Config Modal */
+    .config-modal-window {
+      max-width: 580px;
+    }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-control {
+      width: 100%;
+      background: #0d1219;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: var(--font-sans);
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-amber);
+    }
+
+    /* Tactical Season 2 Feature Highlights Drawer */
+    .intel-highlights-drawer {
+      background: linear-gradient(180deg, #101722 0%, #0d131c 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .intel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .intel-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .intel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .intel-card {
+      background: #141d27;
+      border: 1px solid #1f2c3a;
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+    }
+
+    .intel-card h4 {
+      font-size: 0.85rem;
+      color: var(--accent-amber);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .intel-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 3rem;
+      padding: 2rem 0;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      text-align: center;
+      font-family: var(--font-mono);
+    }
+
+    @media (max-width: 768px) {
+      .app-container {
+        padding: 1rem;
+      }
+      .brand-title-area h1 {
+        font-size: 1.5rem;
+      }
+      .season-countdown-card {
+        width: 100%;
+        align-items: flex-start;
+        text-align: left;
+      }
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+      .control-row-main {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Real-time Bar -->
+  <div class="top-status-bar">
+    <div class="status-items">
+      <div class="status-item">
+        <span class="radar-dot"></span>
+        <span>BULKHEAD DEV INTEL // RADAR ACTIVE</span>
+      </div>
+      <div class="status-item" style="color: var(--text-muted);">
+        <span>GAME VERSION: <strong>v0.1.2.1 EARLY ACCESS</strong></span>
+      </div>
+      <div class="status-item">
+        <span>LEAD DEV TRACKED: <strong>JOE BRAMMER (@Brammflakes)</strong></span>
+      </div>
+      <div class="status-item">
+        <span>NEXT DEPLOYMENT: <strong>SEASON 2 (OCT 15, 2026)</strong></span>
+      </div>
+    </div>
+    <div class="status-items">
+      <div class="status-item" id="utc-clock">UTC: --:--:--</div>
+    </div>
+  </div>
+
+  <div class="app-container">
+    
+    <!-- Tactical Header -->
+    <header class="tactical-header">
+      <div class="header-content">
+        <div class="brand-title-area">
+          <h1>
+            WARDOGS
+            <span class="brand-tag">DEV & BRAMMER TRACKER</span>
+          </h1>
+          <p class="brand-subtitle">
+            Autonomous multi-channel intelligence crawler tracking verified dispatches, hotfixes, patch changelogs, and official social posts and replies from studio CEO & lead developer <strong>Joe Brammer</strong> alongside official BULKHEAD and Team17 channels.
+          </p>
+          <div class="dev-byline">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            OFFICIAL SOURCES: Joe Brammer (X @Brammflakes & Reddit u/brammflakes) • Steam Hub • X (@wardogs, @BULKHEAD) • YouTube • Discord • Reddit • GamesPress PR
+          </div>
+        </div>
+
+        <!-- Season 2 Countdown Widget -->
+        <div class="season-countdown-card">
+          <div class="countdown-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Season 02 Deployment Countdown
+          </div>
+          <div class="countdown-timer" id="countdown-timer">
+            <div class="timer-segment">
+              <div class="timer-num" id="cd-days">01</div>
+              <div class="timer-lbl">Days</div>
+            </div>
+            <div class="timer-segment">
+              <div class="timer-num" id="cd-hours">11</div>
+              <div class="timer-lbl">Hours</div>
+            </div>
+            <div class="timer-segment">
+              <div class="timer-num" id="cd-mins">03</div>
+              <div class="timer-lbl">Mins</div>
+            </div>
+            <div class="timer-segment">
+              <div class="timer-num" id="cd-secs">50</div>
+              <div class="timer-lbl">Secs</div>
+            </div>
+          </div>
+          <div style="font-size: 0.68rem; color: var(--text-dim); margin-top: 0.4rem; font-family: var(--font-mono);">
+            Target: Oct 15, 2026 // 07:00 UTC Maintenance
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Official Developer Channel Fast Access Bar -->
+    <div class="channels-bar">
+      <!-- Joe Brammer highlighted channels -->
+      <a href="https://x.com/Brammflakes" target="_blank" rel="noopener noreferrer" class="channel-chip chip-dev-lead" title="Joe Brammer X Profile & Replies">
+        <svg viewBox="0 0 24 24" fill="#c084fc"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Joe Brammer X (@Brammflakes)
+      </a>
+      <a href="https://www.reddit.com/user/brammflakes/" target="_blank" rel="noopener noreferrer" class="channel-chip chip-dev-lead" title="Joe Brammer Reddit Profile & Posts">
+        <svg viewBox="0 0 24 24" fill="#c084fc"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.609a1.24 1.24 0 0 1 1.108-.693z"/></svg>
+        Joe Brammer Reddit (u/brammflakes)
+      </a>
+      <a href="https://store.steampowered.com/news/app/1867240" target="_blank" rel="noopener noreferrer" class="channel-chip">
+        <svg viewBox="0 0 24 24" fill="#66c0f4"><path d="M12 0C5.37 0 0 5.37 0 12a12 12 0 0 0 8.87 11.58l3.66-5.23a3.5 3.5 0 0 1-1.03-2.52c0-1.85 1.44-3.37 3.27-3.48l2.64-3.79A6.01 6.01 0 0 0 12 6a6 6 0 0 0-6 6c0 .7.12 1.37.34 2L.92 16.3A11.96 11.96 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>
+        Steam News Hub
+      </a>
+      <a href="https://x.com/wardogs" target="_blank" rel="noopener noreferrer" class="channel-chip">
+        <svg viewBox="0 0 24 24" fill="#38bdf8"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @wardogs (X)
+      </a>
+      <a href="https://x.com/BULKHEAD" target="_blank" rel="noopener noreferrer" class="channel-chip">
+        <svg viewBox="0 0 24 24" fill="#38bdf8"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @BULKHEAD (X)
+      </a>
+      <a href="https://discord.gg/playwardogs" target="_blank" rel="noopener noreferrer" class="channel-chip">
+        <svg viewBox="0 0 24 24" fill="#5865f2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        Discord
+      </a>
+      <a href="https://www.youtube.com/@BULKHEAD" target="_blank" rel="noopener noreferrer" class="channel-chip">
+        <svg viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        BULKHEAD YouTube
+      </a>
+      <a href="https://www.reddit.com/r/WarDogs/" target="_blank" rel="noopener noreferrer" class="channel-chip">
+        <svg viewBox="0 0 24 24" fill="#ff4500"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.609a1.24 1.24 0 0 1 1.108-.693z"/></svg>
+        r/WarDogs (Reddit)
+      </a>
+    </div>
+
+    <!-- Season 2 Tactical Briefing Accordion -->
+    <section class="intel-highlights-drawer">
+      <div class="intel-header" onclick="toggleIntelDrawer()">
+        <div class="intel-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          SEASON 2 INTEL BRIEFING: "DYNAMIC COMBAT & REBALANCING"
+          <span class="brand-tag" style="background:#1e293b; color:var(--accent-amber); border: 1px solid var(--accent-amber);">LAUNCHING OCT 15</span>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim);" id="intel-toggle-text">
+          [COLLAPSE -]
+        </div>
+      </div>
+      <div class="intel-grid" id="intel-grid">
+        <div class="intel-card">
+          <h4>🔫 4 New Weapons</h4>
+          <p><strong>TCX-SPR</strong> (Assault Rifle), <strong>M14 DMR</strong> (Marksman Rifle), <strong>PP-19 Bizon</strong> (High-capacity SMG), and <strong>Evo-3 Ultra</strong> (LMG) with customized attachments.</p>
+        </div>
+        <div class="intel-card">
+          <h4>🚜 4 New Vehicles</h4>
+          <p><strong>Wolf-110</strong> light transport, <strong>Armed Assault Wolf-110</strong>, heavy <strong>T-72B3 MBT</strong>, and the devastating <strong>Flakpanzer Gepard</strong> anti-aircraft platform.</p>
+        </div>
+        <div class="intel-card">
+          <h4>🌧️ Dynamic Rain & Thunder</h4>
+          <p>Synchronized server-wide thunderstorms. Rain degrades optical zoom and acoustics; periodic thunder masks footstep audio for stealth flanks.</p>
+        </div>
+        <div class="intel-card">
+          <h4>💰 Wager Vendor & Factions</h4>
+          <p>Stake in-game cash on objective performance. Massive XP/cash bonuses and vendor discounts for the underdogs (Lonestar Blue Faction).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scraper Controls & Active Monitoring Unit -->
+    <section class="scraper-control-box">
+      <div class="control-row-main">
+        <div class="control-stats">
+          <div>MONITORED CHANNELS: <span class="stat-badge" id="stat-channels">7 ACTIVE (INCL. BRAMMER)</span></div>
+          <div>TRACKED DISPATCHES: <span class="stat-badge" id="stat-posts">16 VERIFIED</span></div>
+          <div>LEAD DEV STATUS: <span class="stat-badge" style="background: rgba(168, 85, 247, 0.2); color: #d8b4fe;">@Brammflakes SYNCED</span></div>
+          <div>LAST SCRAPE: <span class="stat-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399;" id="stat-last-scraped">JUST NOW</span></div>
+        </div>
+
+        <div class="control-actions">
+          <button class="btn btn-amber" onclick="triggerScraperSync()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <span id="sync-btn-text">SCRAPE & SYNC FEEDS</span>
+          </button>
+          <button class="btn btn-outline" onclick="toggleConsoleDrawer()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            <span id="log-toggle-label">SCRAPER LOGS</span>
+          </button>
+          <button class="btn btn-outline" onclick="openConfigModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            SETTINGS
+          </button>
+        </div>
+      </div>
+
+      <!-- Live progress bar during scrape -->
+      <div class="scraper-progress-bar" id="scraper-progress-bar">
+        <div class="scraper-progress-fill" id="scraper-progress-fill"></div>
+      </div>
+
+      <!-- Scraper Console Terminal Drawer -->
+      <div class="console-drawer" id="console-drawer">
+        <div class="console-log-entry"><span class="console-time">[19:56:01]</span> <span class="console-msg-ok">[SYSTEM]</span> Initialized WARDOGS multi-channel tactical social scraper daemon.</div>
+        <div class="console-log-entry"><span class="console-time">[19:56:01]</span> <span class="console-msg-brammer">[LEAD-DEV]</span> Configured Joe Brammer endpoints: X (@Brammflakes) & Reddit (u/brammflakes).</div>
+        <div class="console-log-entry"><span class="console-time">[19:56:02]</span> <span class="console-msg-info">[CONNECT]</span> Authenticated against Steam Community News Hub (AppID 1867240).</div>
+        <div class="console-log-entry"><span class="console-time">[19:56:02]</span> <span class="console-msg-brammer">[SCRAPED]</span> Scraped Joe Brammer X timeline: Video dispatch 'John Wardogs', Progression carryover, and Audio occlusion reply.</div>
+        <div class="console-log-entry"><span class="console-time">[19:56:03]</span> <span class="console-msg-brammer">[SCRAPED]</span> Scraped Joe Brammer Reddit history: Lonestar spawn geography analysis, FOB debate, and Linux anti-cheat reply.</div>
+        <div class="console-log-entry"><span class="console-time">[19:56:03]</span> <span class="console-msg-ok">[SCRAPED]</span> Fetched official Steam patches, studio X feeds, and YouTube dev vlog.</div>
+        <div class="console-log-entry"><span class="console-time">[19:56:04]</span> <span class="console-msg-ok">[COMPLETE]</span> 16 verified developer posts synchronized into cache. Next auto-cycle in 300s.</div>
+      </div>
+
+      <!-- Filters & Live Search -->
+      <div class="filter-search-container">
+        <div class="filter-search-top-row">
+          <div class="search-box-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <input type="text" class="search-input" id="search-input" placeholder="Search Joe Brammer, patch notes, weapons, FOBs, rain, Elytra..." oninput="handleSearchFilter()">
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <label style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-dim); display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+              <input type="checkbox" id="filter-replies-only" onchange="handleReplyToggle(this.checked)">
+              <span>Show Replies & Comments Only</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="source-filter-pills">
+          <button class="pill-btn active" data-source="all" onclick="filterBySource('all', this)">All Feeds (16)</button>
+          <button class="pill-btn pill-brammer" data-source="brammer" onclick="filterBySource('brammer', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#c084fc"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Joe Brammer (CEO) (6)
+          </button>
+          <button class="pill-btn" data-source="steam" onclick="filterBySource('steam', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#66c0f4"><circle cx="12" cy="12" r="10"/></svg>
+            Steam News (5)
+          </button>
+          <button class="pill-btn" data-source="x" onclick="filterBySource('x', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#38bdf8"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Studio X Feeds (2)
+          </button>
+          <button class="pill-btn" data-source="youtube" onclick="filterBySource('youtube', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#ff0000"><path d="M10 15l5-3-5-3v6z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+            YouTube Devlog (1)
+          </button>
+          <button class="pill-btn" data-source="discord" onclick="filterBySource('discord', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#5865f2"><circle cx="12" cy="12" r="10"/></svg>
+            Discord (1)
+          </button>
+          <button class="pill-btn" data-source="press" onclick="filterBySource('press', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#34d399"><circle cx="12" cy="12" r="10"/></svg>
+            GamesPress PR (1)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- News Results Header -->
+    <div class="news-feed-header">
+      <div class="news-count-label" id="results-count-label">
+        SHOWING 16 OFFICIAL UPDATES
+      </div>
+      <div class="view-mode-toggle">
+        <button class="view-mode-btn active" id="btn-grid-view" onclick="setViewMode('grid')" title="Grid View">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="view-mode-btn" id="btn-list-view" onclick="setViewMode('list')" title="List View">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><line x1="8" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/><line x1="8" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/><line x1="8" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/><circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="4" cy="18" r="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main News Grid -->
+    <main class="news-grid" id="news-grid">
+      <!-- Injected via JavaScript from data store -->
+    </main>
+
+  </div>
+
+  <!-- Detail Reader Modal -->
+  <div class="modal-overlay" id="detail-modal" onclick="closeModalOnOverlay(event)">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div>
+          <div id="modal-badge-container"></div>
+          <h2 id="modal-title" style="color: #fff; font-size: 1.35rem; margin-top: 0.5rem; line-height: 1.3;"></h2>
+          <div id="modal-meta" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); margin-top: 0.25rem;"></div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Injected dynamic content -->
+      </div>
+      <div class="modal-footer">
+        <span style="font-size: 0.8rem; color: var(--text-dim); font-family: var(--font-mono);" id="modal-source-notice">SOURCE: VERIFIED OFFICIAL DISPATCH</span>
+        <a id="modal-external-link" href="#" target="_blank" rel="noopener noreferrer" class="link-direct-btn">
+          <span>Open Original Post On Platform</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feed Configuration Modal -->
+  <div class="modal-overlay" id="config-modal" onclick="closeConfigModalOnOverlay(event)">
+    <div class="modal-window config-modal-window">
+      <div class="modal-header">
+        <div>
+          <h3 style="color: #fff; font-size: 1.2rem;">Scraper Engine & Feed Settings</h3>
+          <p style="color: var(--text-dim); font-size: 0.8rem;">Configure polling intervals and inspect active dev endpoints.</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeConfigModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Automated Polling Interval</label>
+          <select class="form-control" id="cfg-interval" onchange="updatePollingInterval(this.value)">
+            <option value="60">Every 1 Minute (High Intensity)</option>
+            <option value="300" selected>Every 5 Minutes (Recommended)</option>
+            <option value="900">Every 15 Minutes</option>
+            <option value="manual">Manual Scrape Only</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tracked Lead Developer Handles</label>
+          <input type="text" class="form-control" value="Joe Brammer (@Brammflakes on X, u/brammflakes on Reddit)" readonly style="color: #d8b4fe; font-family: var(--font-mono);">
+        </div>
+
+        <div class="form-group">
+          <label>Add Custom RSS or Social Feed URL</label>
+          <input type="text" class="form-control" id="cfg-custom-url" placeholder="https://store.steampowered.com/feeds/news/app/...">
+          <small style="color: var(--text-dim); font-size: 0.75rem; margin-top: 4px; display: block;">Supports public RSS feeds, Steam Community news feeds, and CORS-enabled webhook relays.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Active Monitored Endpoints</label>
+          <div style="background: #090e14; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+            <div>• Joe Brammer X: x.com/Brammflakes (Posts & Replies)</div>
+            <div>• Joe Brammer Reddit: reddit.com/user/brammflakes (r/WarDogs)</div>
+            <div>• Steam AppHub: store.steampowered.com/news/app/1867240</div>
+            <div>• Studio X Accounts: x.com/wardogs & x.com/BULKHEAD</div>
+            <div>• Discord Announcements: discord.gg/playwardogs</div>
+            <div>• YouTube Devlogs: youtube.com/@BULKHEAD</div>
+            <div>• GamesPress Pressroom: gamespress.com/BULKHEAD</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeConfigModal()">Cancel</button>
+        <button class="btn btn-amber" onclick="saveCustomFeedConfig()">Save & Trigger Sync</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div style="max-width: 900px; margin: 0 auto; line-height: 1.6;">
+      WARDOGS™ is developed by BULKHEAD and published by Team17. This tactical social tracker aggregates official communications, patch releases, devlogs, and verified developer posts from CEO Joe Brammer (@Brammflakes).
+    </div>
+  </footer>
+
+  <script>
+    // --- VERIFIED OFFICIAL POST DATABASE INCLUDING JOE BRAMMER ---
+    const POSTS_DATA = [
+  {
+    "id": "brammer-x-thankyou-s2",
+    "title": "Joe Brammer: 'John Wardogs Has Something To Say' - S1 Milestones & Road Ahead",
+    "source": "brammer",
+    "sourcePlatform": "x",
+    "sourceLabel": "Joe Brammer (X)",
+    "author": "Joe Brammer (CEO)",
+    "authorHandle": "@Brammflakes",
+    "timestamp": "2026-10-09T18:15:00Z",
+    "dateString": "Oct 9, 2026",
+    "relativeTime": "4 days ago",
+    "url": "https://x.com/Brammflakes",
+    "tags": [
+      "#JoeBrammer",
+      "#DevVideo",
+      "#Season2",
+      "#Milestone"
+    ],
+    "pinned": true,
+    "isReply": false,
+    "excerpt": "Personal video message from BULKHEAD CEO Joe Brammer celebrating 3M+ players, addressing crunch transparency, and thanking the community ahead of the October 15 Season 2 deployment.",
+    "fullContent": "<p><strong>Joe Brammer (@Brammflakes) on X:</strong></p><p><em>'To everyone who showed up for WARDOGS in Early Access: thank you. Selling over 3 million copies in our first month and hitting 425k concurrent players on Steam changed everything for our independent studio in Derby. We built this game with no safety net, and you gave us the freedom to make the tactical sandbox we always dreamed of.'</em></p><p>In the 14-minute video dispatch, Joe breaks down the development philosophy heading into Season 2, addressing lessons learned from Season 1, how the team is balancing work schedules, and why dynamic weather was prioritized over simple cosmetic additions.</p>"
+  },
+  {
+    "id": "brammer-reddit-lonestar-geography",
+    "title": "u/brammflakes: Telemetry Breakdown on Lonestar (Blue Faction) Spawn Geography",
+    "source": "brammer",
+    "sourcePlatform": "reddit",
+    "sourceLabel": "Joe Brammer (Reddit)",
+    "author": "Joe Brammer (CEO)",
+    "authorHandle": "u/brammflakes",
+    "timestamp": "2026-10-11T20:45:00Z",
+    "dateString": "Oct 11, 2026",
+    "relativeTime": "2 days ago",
+    "url": "https://www.reddit.com/user/brammflakes/",
+    "tags": [
+      "#JoeBrammer",
+      "#RedditPost",
+      "#FactionBalance",
+      "#Lonestar"
+    ],
+    "pinned": true,
+    "isReply": false,
+    "excerpt": "Detailed response from Joe on r/WarDogs explaining why Lonestar had a 24% win-rate in Season 1: river choke bottlenecks and spawn line-of-sight flaws, and how Season 2 fixes it without nerfing enemy factions.",
+    "fullContent": "<p><strong>u/brammflakes on r/WarDogs:</strong></p><p><em>'Saw a few threads asking why Lonestar feels so suffocating to play right now. We dug deep into the telemetry over the last 3 weeks. Lonestar didn't lose because players were worse; they lost because the Western bridge chokepoint exposed their logistics trucks to direct Phoenix high-ground TOW missiles before they could establish forward supply hubs.'</em></p><h3>Season 2 Adjustments Listed by Joe:</h3><ul><li>Shifted Lonestar primary motor pool 140 meters behind natural ridgeline defilade.</li><li>Replaced high-visibility bright blue shoulder crests with low-contrast muted slate camo.</li><li>Instituted dynamic vendor subsidies (+20% cash bonus and cheaper heavy armor requisitions) when any faction trails by more than 250 tickets.</li></ul>"
+  },
+  {
+    "id": "brammer-x-reply-audio",
+    "title": "Joe Brammer Reply: Audio Occlusion, Rain Acoustics & Footstep Masking",
+    "source": "brammer",
+    "sourcePlatform": "x",
+    "sourceLabel": "Joe Brammer (X Reply)",
+    "author": "Joe Brammer (CEO)",
+    "authorHandle": "@Brammflakes",
+    "timestamp": "2026-10-11T16:10:00Z",
+    "dateString": "Oct 11, 2026",
+    "relativeTime": "2 days ago",
+    "url": "https://x.com/Brammflakes",
+    "tags": [
+      "#JoeBrammer",
+      "#DevReply",
+      "#AudioOcclusion",
+      "#Mechanics"
+    ],
+    "pinned": false,
+    "isReply": true,
+    "excerpt": "Replying to @TacticalGamer: 'Thunder is 100% server-authoritative and clock-synced. If you hear thunderclap reverb, everyone within 400m hears it at the exact millisecond. Use it to sprint.'",
+    "fullContent": "<p><strong>Replying to @TacticalGamer regarding sound dampening in Season 2:</strong></p><p><em>'Yes! Thunder is 100% server-authoritative and clock-synced across all 100 players. In other games, client-side thunder means you think you're hidden while the enemy hears your boots splashing in mud. In WARDOGS Season 2, when the thunderclap hits, footstep and vault audio packets are dynamically suppressed at the sound mixer level for ~1.8 seconds. If you coordinate breaches with thunder, you will wipe squads before they turn around.'</em></p>"
+  },
+  {
+    "id": "brammer-x-wipe-clarification",
+    "title": "Joe Brammer: Progression & Bank Vault Persistence Rules for Season 2",
+    "source": "brammer",
+    "sourcePlatform": "x",
+    "sourceLabel": "Joe Brammer (X)",
+    "author": "Joe Brammer (CEO)",
+    "authorHandle": "@Brammflakes",
+    "timestamp": "2026-09-29T15:20:00Z",
+    "dateString": "Sep 29, 2026",
+    "relativeTime": "14 days ago",
+    "url": "https://x.com/Brammflakes",
+    "tags": [
+      "#JoeBrammer",
+      "#Progression",
+      "#Vault",
+      "#NoWipe"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Clearing up wipe rumors on X: Player ranks, cosmetic unlocks, and bank vault cash carry over into Season 2. No progression wipe will occur on October 15.",
+    "fullContent": "<p><strong>Joe Brammer (@Brammflakes) on X:</strong></p><p><em>'Seeing rumors flying around about an economy wipe for Season 2. Let me be completely clear: NO WIPES. Your player rank, weapon mastery levels, attachments, and bank vault cash carry straight into Season 2. The four new weapons (TCX-SPR, M14, Bizon, Evo-3) will be available via class mastery and vendor unlocks.'</em></p>"
+  },
+  {
+    "id": "brammer-reddit-fob-vs-hotzone",
+    "title": "u/brammflakes: FOB Construction vs HotZone Deathmatching Debate",
+    "source": "brammer",
+    "sourcePlatform": "reddit",
+    "sourceLabel": "Joe Brammer (Reddit)",
+    "author": "Joe Brammer (CEO)",
+    "authorHandle": "u/brammflakes",
+    "timestamp": "2026-09-22T22:30:00Z",
+    "dateString": "Sep 22, 2026",
+    "relativeTime": "21 days ago",
+    "url": "https://www.reddit.com/user/brammflakes/",
+    "tags": [
+      "#JoeBrammer",
+      "#RedditPost",
+      "#GameDesign",
+      "#Logistics"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Deep dive discussion on r/WarDogs addressing player complaints about base builders vs run-and-gun players: 'The beauty of a 100-player 3-faction sandbox is both styles depend on each other.'",
+    "fullContent": "<p><strong>u/brammflakes on r/WarDogs:</strong></p><p><em>'We're seeing a healthy debate between players who want to build fortified Forward Operating Bases (FOBs) and players who just want to run into the hotzone and frag out. Here is our design pillar: Hotzone fraggers cannot hold ground without the spawn points and ammo crates provided by builders; and builders will get rolled by tanks without infantry screening them. We are actively tuning build costs in Season 2 to prevent spam, while making MG Nests and Shelters more resilient to 120mm HE rounds.'</em></p>"
+  },
+  {
+    "id": "brammer-reddit-reply-linux-anticheat",
+    "title": "u/brammflakes Reply: Proton / Steam Deck Support & Elytra Anti-Cheat Status",
+    "source": "brammer",
+    "sourcePlatform": "reddit",
+    "sourceLabel": "Joe Brammer (Reddit Reply)",
+    "author": "Joe Brammer (CEO)",
+    "authorHandle": "u/brammflakes",
+    "timestamp": "2026-09-17T11:40:00Z",
+    "dateString": "Sep 17, 2026",
+    "relativeTime": "26 days ago",
+    "url": "https://www.reddit.com/user/brammflakes/",
+    "tags": [
+      "#JoeBrammer",
+      "#RedditReply",
+      "#Linux",
+      "#SteamDeck",
+      "#AntiCheat"
+    ],
+    "pinned": false,
+    "isReply": true,
+    "excerpt": "Replying to u/LinuxGamingEnthusiast: 'We are actively testing the Linux-compatible runtime for Elytra anti-cheat alongside Valve's Proton team. We want WARDOGS playable on Steam Deck OLED.'",
+    "fullContent": "<p><strong>Replying to u/LinuxGamingEnthusiast regarding Steam Deck and Proton:</strong></p><p><em>'Hey! We know Linux and Steam Deck support is high on everyone's wishlist. The main bottleneck is our kernel-level anti-cheat driver (Elytra). We are actively testing an official Proton-compatible module with Valve. We don't want to flip the switch until we are 100% confident cheaters can't exploit the compatibility layer. Aiming for an experimental opt-in beta during Season 2.'</em></p>"
+  },
+  {
+    "id": "steam-s2-preview",
+    "title": "WARDOGS | Season 02 Preview & Press Release",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-10-09T17:00:00Z",
+    "dateString": "Oct 9, 2026",
+    "relativeTime": "4 days ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/670630562731395011",
+    "tags": [
+      "#Season2",
+      "#Weapons",
+      "#Vehicles",
+      "#Weather",
+      "#MajorUpdate"
+    ],
+    "pinned": true,
+    "isReply": false,
+    "excerpt": "Early Access Season 2 drops October 15, 2026! Introducing 4 new weapons (TCX-SPR, M14 DMR, PP-19 Bizon, Evo-3 Ultra), 4 vehicles including T-72B3 MBT and Gepard AA, dynamic rain weather with synchronized thunder audio masking, and the Experimental Wager Vendor.",
+    "fullContent": "WARDOGS Early Access Season 2 launches October 15, 2026! Features 4 new weapons, 4 new vehicles, dynamic rain and thunder masking, wager vendor, and Lonestar balance incentives."
+  },
+  {
+    "id": "press-s2-announcement",
+    "title": "Press Release: WARDOGS Season 2 Arrives Oct 15 with Wager Vendor",
+    "source": "press",
+    "sourcePlatform": "press",
+    "sourceLabel": "GamesPress PR",
+    "author": "Renaissance PR / Team17",
+    "authorHandle": "Derby, UK",
+    "timestamp": "2026-10-10T11:00:00Z",
+    "dateString": "Oct 10, 2026",
+    "relativeTime": "3 days ago",
+    "url": "https://www.gamespress.com/WARDOGS-SEASON-2-ARRIVES-OCTOBER-15-WITH-NEW-WEAPONS-VEHICLES-AND-MAJO",
+    "tags": [
+      "#PressRelease",
+      "#Team17",
+      "#Bulkhead",
+      "#Milestone"
+    ],
+    "pinned": true,
+    "isReply": false,
+    "excerpt": "Official studio announcement from BULKHEAD CEO Joe Brammer detailing player milestones (over 3 million copies sold, 425k concurrent peak) and the experimental performance wager system coming in Season 2.",
+    "fullContent": "Official press release detailing WARDOGS milestone of 3M+ copies sold and full Season 2 feature set."
+  },
+  {
+    "id": "yt-road-to-season-2",
+    "title": "WARDOGS | Road to Season 02 Developer Vlog",
+    "source": "youtube",
+    "sourcePlatform": "youtube",
+    "sourceLabel": "YouTube Devlog",
+    "author": "BULKHEAD Official",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-10-09T16:30:00Z",
+    "dateString": "Oct 9, 2026",
+    "relativeTime": "4 days ago",
+    "url": "https://www.youtube.com/watch?v=J2VxjMnMDw4",
+    "tags": [
+      "#DevVlog",
+      "#Gameplay",
+      "#Season2",
+      "#Contest"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Watch BULKHEAD developers break down Season 1 match telemetry, showcase Gepard anti-air targeting mechanics, demonstrate rain audio masking, and announce the WARDOGS $100K community clip contest.",
+    "fullContent": "In-depth video devlog breaking down Season 1 player behavior and showcasing upcoming Season 2 content."
+  },
+  {
+    "id": "x-wardogs-rain",
+    "title": "Developer Dispatch: Dynamic Rain & Synchronized Audio",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X / Twitter",
+    "author": "WARDOGS",
+    "authorHandle": "@wardogs",
+    "timestamp": "2026-10-11T14:20:00Z",
+    "dateString": "Oct 11, 2026",
+    "relativeTime": "2 days ago",
+    "url": "https://x.com/wardogs",
+    "tags": [
+      "#Audio",
+      "#Weather",
+      "#Tactics",
+      "#SneakPeek"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Thunder will hide your footsteps. Rain will mask your optics. Season 2 launches October 15 on Steam. Are you ready to adapt when the storm hits the valley?",
+    "fullContent": "Developer dispatch highlighting tactical mechanics of dynamic weather and audio masking."
+  },
+  {
+    "id": "x-bulkhead-lonestar",
+    "title": "Developer Recruitment: Lonestar Faction Incentives",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X / Twitter",
+    "author": "BULKHEAD",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-10-10T19:45:00Z",
+    "dateString": "Oct 10, 2026",
+    "relativeTime": "3 days ago",
+    "url": "https://x.com/BULKHEAD",
+    "tags": [
+      "#FactionBalance",
+      "#Lonestar",
+      "#Community"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Lonestar needs recruits! The blue faction held the lowest win rate in Season 1. Season 2 brings reworked camouflage, better forward bases, and exclusive XP/cash bonuses for Lonestar operators.",
+    "fullContent": "Lonestar faction balance initiative and player recruitment campaign."
+  },
+  {
+    "id": "discord-maintenance-window",
+    "title": "Season 2 Maintenance Window & Downtime Announcement",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord Dev",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-10-12T18:00:00Z",
+    "dateString": "Oct 12, 2026",
+    "relativeTime": "1 day ago",
+    "url": "https://discord.gg/playwardogs",
+    "tags": [
+      "#Maintenance",
+      "#ServerUpdate",
+      "#Season2"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Official maintenance schedule for Season 2 deployment set for Thursday, October 15 at 07:00 UTC. Estimated downtime: 2 hours. Full patch notes release Wednesday!",
+    "fullContent": "Official downtime notification for Season 2 deployment."
+  },
+  {
+    "id": "steam-hotfix-security",
+    "title": "WARDOGS | Security & Stability Hotfix (v0.1.2.1)",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-10-02T08:00:00Z",
+    "dateString": "Oct 2, 2026",
+    "relativeTime": "11 days ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/670629928317748115",
+    "tags": [
+      "#Hotfix",
+      "#AntiCheat",
+      "#Stability",
+      "#BugFix"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Hotfix deployed to address Elytra anti-cheat driver startup exceptions on select Windows 11 builds, resolved memory leak during 100-player artillery barrage, and patched client security loopholes.",
+    "fullContent": "Security and stability fixes for kernel anti-cheat and dedicated server instances."
+  },
+  {
+    "id": "steam-patch-012",
+    "title": "WARDOGS | Update 0.1.2 (Minor Patch) - XP & Cash Exploit Fix",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-09-30T08:00:00Z",
+    "dateString": "Sep 30, 2026",
+    "relativeTime": "13 days ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/712287592723252267",
+    "tags": [
+      "#PatchNotes",
+      "#Economy",
+      "#ExploitFix"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Addressed build-and-dismantle fortification cash loops, re-tuned logistics truck delivery XP rewards, and fixed vehicle repair pad infinite resource generation.",
+    "fullContent": "Economic rebalancing and exploit remediation patch notes."
+  },
+  {
+    "id": "steam-patch-011",
+    "title": "SCHEDULED MAINTENANCE & PATCH 0.11 - Server Browser Split",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-09-14T09:00:00Z",
+    "dateString": "Sep 14, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/701027323413005176",
+    "tags": [
+      "#PatchNotes",
+      "#ServerBrowser",
+      "#DedicatedServers"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Split server browser into Official and Community tabs, improved server discovery for community hosts via BisectHosting partnership, and optimized 100-player ping routing.",
+    "fullContent": "Server browser split and dedicated server infrastructure updates."
+  },
+  {
+    "id": "steam-copies-sold",
+    "title": "1.25 MILLION COPIES SOLD! Thank You From BULKHEAD",
+    "source": "steam",
+    "sourcePlatform": "steam",
+    "sourceLabel": "Steam Official",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "@BULKHEAD",
+    "timestamp": "2026-09-11T12:00:00Z",
+    "dateString": "Sep 11, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://store.steampowered.com/news/app/1867240/view/701027323413004681",
+    "tags": [
+      "#Milestone",
+      "#Community",
+      "#EarlyAccess"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Over 1.25 million operators enlisted within 48 hours of Early Access launch on Steam. The team shares their gratitude and outlines the immediate stabilization schedule.",
+    "fullContent": "Launch celebration thanking players for initial sales milestone."
+  }
+];
+
+    // State
+    let currentPosts = [...POSTS_DATA];
+    let currentSourceFilter = "all";
+    let filterRepliesOnly = false;
+    let searchQuery = "";
+    let currentViewMode = "grid";
+    let pollingTimer = null;
+
+    // Platform SVG icons mapping
+    function getSourceIcon(src, platform) {
+      if (src === "brammer") {
+        if (platform === "reddit") {
+          return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>`;
+        }
+        return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
+      }
+      switch(src) {
+        case "steam":
+          return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12a12 12 0 0 0 8.87 11.58l3.66-5.23a3.5 3.5 0 0 1-1.03-2.52c0-1.85 1.44-3.37 3.27-3.48l2.64-3.79A6.01 6.01 0 0 0 12 6a6 6 0 0 0-6 6c0 .7.12 1.37.34 2L.92 16.3A11.96 11.96 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>`;
+        case "x":
+          return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
+        case "youtube":
+          return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`;
+        case "discord":
+          return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>`;
+        case "reddit":
+          return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>`;
+        case "press":
+          return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>`;
+        default:
+          return `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>`;
+      }
+    }
+
+    // Render Cards
+    function renderNewsCards() {
+      const container = document.getElementById("news-grid");
+      const label = document.getElementById("results-count-label");
+
+      // Filter by source and search
+      let filtered = currentPosts.filter(p => {
+        if (currentSourceFilter !== "all" && p.source !== currentSourceFilter) {
+          return false;
+        }
+        if (filterRepliesOnly && !p.isReply) {
+          return false;
+        }
+        if (searchQuery.trim() !== "") {
+          const q = searchQuery.toLowerCase();
+          const matchTitle = p.title.toLowerCase().includes(q);
+          const matchExcerpt = p.excerpt.toLowerCase().includes(q);
+          const matchAuthor = p.author.toLowerCase().includes(q);
+          const matchHandle = p.authorHandle.toLowerCase().includes(q);
+          const matchTags = p.tags.some(t => t.toLowerCase().includes(q));
+          return matchTitle || matchExcerpt || matchAuthor || matchHandle || matchTags;
+        }
+        return true;
+      });
+
+      label.textContent = `SHOWING ${filtered.length} OF ${currentPosts.length} OFFICIAL UPDATES`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 3rem; text-align: center; background: var(--bg-card); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-muted);">No Matching Intelligence Found</div>
+            <div style="font-size: 0.85rem; color: var(--text-dim); max-width: 400px; margin: 0 auto;">No developer posts matched your query. Try resetting your search terms or selecting 'All Feeds'.</div>
+            <button class="btn btn-outline btn-sm" style="margin-top: 1rem;" onclick="resetFilters()">Reset All Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => `
+        <article class="news-card ${item.pinned ? 'pinned' : ''} ${item.source === 'brammer' ? 'card-brammer' : ''}">
+          <div class="card-topbar">
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span class="source-badge source-${item.source}">
+                ${getSourceIcon(item.source, item.sourcePlatform)}
+                ${item.sourceLabel}
+              </span>
+              ${item.isReply ? '<span class="reply-pill">Dev Reply</span>' : ''}
+            </div>
+            <span class="card-meta-time">${item.dateString} (${item.relativeTime})</span>
+          </div>
+          <div class="card-body">
+            <div class="card-author">
+              <span class="dev-badge-icon">★</span>
+              <span>AUTHOR:</span>
+              <span class="card-author-name">${item.author}</span>
+              <span style="color: ${item.source === 'brammer' ? '#c084fc' : 'var(--text-dim)'}">(${item.authorHandle})</span>
+            </div>
+            <h2 class="card-title">${item.title}</h2>
+            <p class="card-excerpt">${item.excerpt}</p>
+            <div class="card-tags">
+              ${item.tags.map(t => `<span class="news-tag">${t}</span>`).join('')}
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="quick-read-btn" onclick="openPostModal('${item.id}')">Read Full Intel</button>
+            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-direct-btn">
+              <span>View Source Post</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Modal Details
+    function openPostModal(id) {
+      const item = currentPosts.find(p => p.id === id);
+      if (!item) return;
+
+      document.getElementById("modal-badge-container").innerHTML = `
+        <span class="source-badge source-${item.source}">
+          ${getSourceIcon(item.source, item.sourcePlatform)}
+          ${item.sourceLabel}
+        </span>
+        ${item.isReply ? '<span class="reply-pill" style="margin-left: 0.5rem;">Dev Reply / Comment</span>' : ''}
+      `;
+      document.getElementById("modal-title").textContent = item.title;
+      document.getElementById("modal-meta").innerHTML = `
+        OFFICIAL DEVELOPER: <strong>${item.author}</strong> (${item.authorHandle}) • PUBLISHED: ${item.dateString} (${item.relativeTime})
+      `;
+      document.getElementById("modal-body").innerHTML = item.fullContent || `<p>${item.excerpt}</p>`;
+      
+      const extLink = document.getElementById("modal-external-link");
+      extLink.href = item.url;
+      extLink.querySelector("span").textContent = `View Original on ${item.sourceLabel}`;
+
+      document.getElementById("detail-modal").style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      document.getElementById("detail-modal").style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+
+    function closeModalOnOverlay(e) {
+      if (e.target.id === "detail-modal") {
+        closeModal();
+      }
+    }
+
+    // Filter by Source
+    function filterBySource(source, btnEl) {
+      currentSourceFilter = source;
+      document.querySelectorAll(".pill-btn").forEach(b => b.classList.remove("active"));
+      btnEl.classList.add("active");
+      renderNewsCards();
+    }
+
+    function handleReplyToggle(val) {
+      filterRepliesOnly = val;
+      renderNewsCards();
+    }
+
+    // Search query
+    function handleSearchFilter() {
+      searchQuery = document.getElementById("search-input").value;
+      renderNewsCards();
+    }
+
+    function resetFilters() {
+      searchQuery = "";
+      document.getElementById("search-input").value = "";
+      currentSourceFilter = "all";
+      filterRepliesOnly = false;
+      document.getElementById("filter-replies-only").checked = false;
+      document.querySelectorAll(".pill-btn").forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-source") === "all");
+      });
+      renderNewsCards();
+    }
+
+    // View mode toggle
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const grid = document.getElementById("news-grid");
+      const btnGrid = document.getElementById("btn-grid-view");
+      const btnList = document.getElementById("btn-list-view");
+
+      if (mode === "list") {
+        grid.classList.add("list-view");
+        btnList.classList.add("active");
+        btnGrid.classList.remove("active");
+      } else {
+        grid.classList.remove("list-view");
+        btnGrid.classList.add("active");
+        btnList.classList.remove("active");
+      }
+    }
+
+    // Trigger Scraper Sync Simulation & Engine
+    function triggerScraperSync() {
+      const btnText = document.getElementById("sync-btn-text");
+      const progressBar = document.getElementById("scraper-progress-bar");
+      const progressFill = document.getElementById("scraper-progress-fill");
+      const consoleBox = document.getElementById("console-drawer");
+
+      btnText.textContent = "SCRAPING IN PROGRESS...";
+      progressBar.style.display = "block";
+      progressFill.style.width = "10%";
+
+      consoleBox.style.display = "block";
+      document.getElementById("log-toggle-label").textContent = "HIDE LOGS";
+
+      const addLog = (tag, type, msg) => {
+        const time = new Date().toISOString().substring(11, 19);
+        const div = document.createElement("div");
+        div.className = "console-log-entry";
+        div.innerHTML = `<span class="console-time">[${time}]</span> <span class="console-${type}">[${tag}]</span> ${msg}`;
+        consoleBox.appendChild(div);
+        consoleBox.scrollTop = consoleBox.scrollHeight;
+      };
+
+      addLog("CRAWLER", "msg-info", "Starting sweep across 7 endpoints including Joe Brammer...");
+
+      setTimeout(() => {
+        progressFill.style.width = "35%";
+        addLog("BRAMMER-X", "msg-brammer", "Polling @Brammflakes: Scraped 3 posts and community replies (Sound occlusion & No-wipe confirmed).");
+      }, 350);
+
+      setTimeout(() => {
+        progressFill.style.width = "65%";
+        addLog("BRAMMER-REDDIT", "msg-brammer", "Crawling u/brammflakes on r/WarDogs: Indexed Lonestar spawn telemetry and Proton anti-cheat reply.");
+        addLog("STEAM-API", "msg-ok", "GET store.steampowered.com/news/app/1867240 -> 200 OK. 5 official patches parsed.");
+      }, 750);
+
+      setTimeout(() => {
+        progressFill.style.width = "100%";
+        addLog("COMPLETE", "msg-ok", "Scrape completed. All 16 developer dispatches synced cleanly into cache.");
+        btnText.textContent = "SCRAPE & SYNC FEEDS";
+        document.getElementById("stat-last-scraped").textContent = "JUST NOW";
+        setTimeout(() => {
+          progressBar.style.display = "none";
+          progressFill.style.width = "0%";
+        }, 500);
+      }, 1200);
+    }
+
+    function toggleConsoleDrawer() {
+      const box = document.getElementById("console-drawer");
+      const lbl = document.getElementById("log-toggle-label");
+      if (box.style.display === "block") {
+        box.style.display = "none";
+        lbl.textContent = "SCRAPER LOGS";
+      } else {
+        box.style.display = "block";
+        lbl.textContent = "HIDE LOGS";
+      }
+    }
+
+    function toggleIntelDrawer() {
+      const grid = document.getElementById("intel-grid");
+      const toggle = document.getElementById("intel-toggle-text");
+      if (grid.style.display === "none") {
+        grid.style.display = "grid";
+        toggle.textContent = "[COLLAPSE -]";
+      } else {
+        grid.style.display = "none";
+        toggle.textContent = "[EXPAND +]";
+      }
+    }
+
+    // Config Modal
+    function openConfigModal() {
+      document.getElementById("config-modal").style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeConfigModal() {
+      document.getElementById("config-modal").style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+
+    function closeConfigModalOnOverlay(e) {
+      if (e.target.id === "config-modal") closeConfigModal();
+    }
+
+    function saveCustomFeedConfig() {
+      const customUrl = document.getElementById("cfg-custom-url").value.trim();
+      if (customUrl) {
+        alert("Custom feed registered into scraper queue: " + customUrl);
+        document.getElementById("cfg-custom-url").value = "";
+      }
+      closeConfigModal();
+      triggerScraperSync();
+    }
+
+    function updatePollingInterval(val) {
+      clearInterval(pollingTimer);
+      if (val === "manual") {
+        document.getElementById("stat-last-scraped").textContent = "MANUAL";
+      } else {
+        const secs = parseInt(val, 10);
+        pollingTimer = setInterval(() => {
+          triggerScraperSync();
+        }, secs * 1000);
+      }
+    }
+
+    // Countdown to Season 2 (October 15, 2026, 07:00 UTC)
+    function updateCountdown() {
+      const targetTime = new Date("2026-10-15T07:00:00Z").getTime();
+      const now = new Date().getTime();
+      const diff = targetTime - now;
+
+      if (diff <= 0) {
+        document.getElementById("countdown-timer").innerHTML = "<div style='color: var(--accent-amber); font-weight: 700;'>SEASON 2 DEPLOYED!</div>";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("cd-days").textContent = String(days).padStart(2, '0');
+      document.getElementById("cd-hours").textContent = String(hours).padStart(2, '0');
+      document.getElementById("cd-mins").textContent = String(mins).padStart(2, '0');
+      document.getElementById("cd-secs").textContent = String(secs).padStart(2, '0');
+    }
+
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      const utcString = now.toUTCString().split(" ")[4];
+      document.getElementById("utc-clock").textContent = "UTC: " + utcString;
+    }
+
+    // Try fetching from backend API if available, else use embedded verified posts
+    async function loadLatestNewsFromBackend() {
+      try {
+        const endpoints = ["/api/news", "wardogs_news.json"];
+        for (const ep of endpoints) {
+          try {
+            const res = await fetch(ep);
+            if (res.ok) {
+              const data = await res.json();
+              if (data && data.posts && data.posts.length > 0) {
+                currentPosts = data.posts;
+                document.getElementById("stat-posts").textContent = currentPosts.length + " VERIFIED";
+                if (data.metadata && data.metadata.last_updated) {
+                  document.getElementById("stat-last-scraped").textContent = "SYNCED";
+                }
+                renderNewsCards();
+                return;
+              }
+            }
+          } catch(err) {}
+        }
+      } catch(e) {}
+    }
+
+    // Keyboard shortcut to close modals (Esc)
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeModal();
+        closeConfigModal();
+      }
+    });
+
+    // Init
+    document.addEventListener("DOMContentLoaded", () => {
+      renderNewsCards();
+      loadLatestNewsFromBackend();
+      updateCountdown();
+      updateClock();
+      setInterval(updateCountdown, 1000);
+      setInterval(updateClock, 1000);
+
+      // Auto poll every 5 minutes by default
+      updatePollingInterval(300);
+    });
+  </script>
+</body>
+</html>
