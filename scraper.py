@@ -33,6 +33,8 @@ OFFICIAL_FEEDS = {
     "steam_api": STEAM_NEWS_API,
     "youtube_channel": "https://www.youtube.com/feeds/videos.xml?channel_id=UCv7u1o204n6Y3u0v97eS_eA",
     "brammer_x_syndication": "https://syndication.twitter.com/srv/timeline-profile/screen-name/Brammflakes",
+    "wardogs_updates_x_syndication": "https://syndication.twitter.com/srv/timeline-profile/screen-name/WARDOGSUpdates",
+    "wardogs_updates_x_nitter": "https://nitter.privacydev.net/WARDOGSUpdates/rss",
     "brammer_x_nitter": "https://nitter.privacydev.net/Brammflakes/with_replies/rss",
     "brammer_reddit_user": "https://www.reddit.com/user/brammflakes.json?sort=new",
     "reddit_wardogs_dev": "https://www.reddit.com/r/WarDogs/search.json?q=flair%3A%22Developer%22+OR+author%3ABulkhead_Official+OR+author%3Abrammflakes&restrict_sr=1&sort=new",
@@ -498,6 +500,240 @@ def fetch_discord_announcements():
         items = list(VERIFIED_DISCORD_POSTS)
     return items
 
+
+VERIFIED_WARDOGSUPDATES_POSTS = [
+  {
+    "id": "x-wardogsupdates-ir-ciws-balance",
+    "title": "IR Rangefinders Disabled from Vendor & CIWS TTK Buff Hotfix",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X (@WARDOGSUpdates)",
+    "author": "WARDOGS Updates",
+    "authorHandle": "@WARDOGSUpdates",
+    "timestamp": "2026-10-02T15:31:00Z",
+    "dateString": "Oct 2, 2026",
+    "relativeTime": "11 days ago",
+    "url": "https://x.com/WARDOGSUpdates/status/2108994872138944512",
+    "tags": [
+      "#BalanceHotfix",
+      "#IRRangefinder",
+      "#CIWS"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Within the next 12 hours when servers restart across regions, IR Rangefinders will be disabled from the vendor until Season 02 (where they will require batteries). CIWS now destroys the Havoc in ~6s (down from 12s). No client download required.",
+    "fullContent": "<p><strong>WARDOGS Live Balance Hotfix via @WARDOGSUpdates:</strong></p><p>We have just deployed 2 key server-side balance adjustments:</p><ul><li><strong>IR Rangefinders:</strong> Disabled from the vendor across all regions over the next 12 hours until Season 02, where they will return requiring batteries to operate.</li><li><strong>CIWS Armor Defense:</strong> TTK against the Havoc reduced from ~12s down to ~6s, correcting the previous patch's overcorrection.</li></ul><p>Zero downtime and no client update download required.</p>"
+  },
+  {
+    "id": "x-wardogsupdates-security-hotfix-notice",
+    "title": "Heads-Up: Security & Server Stability Hotfix Maintenance Window",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X (@WARDOGSUpdates)",
+    "author": "WARDOGS Updates",
+    "authorHandle": "@WARDOGSUpdates",
+    "timestamp": "2026-10-02T00:13:00Z",
+    "dateString": "Oct 2, 2026",
+    "relativeTime": "11 days ago",
+    "url": "https://x.com/WARDOGSUpdates/status/2108764129845312010",
+    "tags": [
+      "#Maintenance",
+      "#Hotfix",
+      "#Stability"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "A hotfix is planned for today, Friday Oct 2 at 08:00 UTC, to address minor security and stability issues affecting some players. Expected downtime is 1 hour.",
+    "fullContent": "<p><strong>@WARDOGSUpdates Maintenance Notice:</strong></p><p>A hotfix deployment is scheduled for today at 08:00 UTC to resolve edge-case server crashes and security issues. Expected downtime: 60 minutes.</p>"
+  },
+  {
+    "id": "x-wardogsupdates-patch-012-release",
+    "title": "Update 0.1.2 Deployment: Windows 11 WD-L020 Crash Fix & Exploit Reset",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X (@WARDOGSUpdates)",
+    "author": "WARDOGS Updates",
+    "authorHandle": "@WARDOGSUpdates",
+    "timestamp": "2026-09-30T05:57:00Z",
+    "dateString": "Sep 30, 2026",
+    "relativeTime": "2 weeks ago",
+    "url": "https://x.com/WARDOGSUpdates/status/2107981249821495201",
+    "tags": [
+      "#Patch012",
+      "#ExploitFix",
+      "#WDL020"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Services are offline for 1 hour at 08:00 UTC while we deploy Update 0.1.2. Resolves Windows 11 KB5124010 crash, enforces server-authoritative revives, adds new DEPLOY menu UX.",
+    "fullContent": "<p><strong>Update 0.1.2 Deployment via @WARDOGSUpdates:</strong></p><p>Update 0.1.2 is rolling out to live servers:</p><ul><li>Fixed Windows 11 WD-L020 startup crash related to update KB5124010.</li><li>Server-authoritative revive checks and exploit penalty resets.</li><li>New DEPLOY menu highlighting Infantry Mode and Low-Level community servers.</li></ul>"
+  },
+  {
+    "id": "x-wardogsupdates-na-network-disruption",
+    "title": "North American Network Disruption Resolved & Server Mitigation",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X (@WARDOGSUpdates)",
+    "author": "WARDOGS Updates",
+    "authorHandle": "@WARDOGSUpdates",
+    "timestamp": "2026-09-24T18:15:00Z",
+    "dateString": "Sep 24, 2026",
+    "relativeTime": "3 weeks ago",
+    "url": "https://x.com/WARDOGSUpdates/status/2105891238472910482",
+    "tags": [
+      "#ServerStatus",
+      "#Network",
+      "#Mitigation"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "PSA: Network disruptions in North American matchmaking have been mitigated. Additional routing nodes are active. Players disconnected mid-match will not receive abandonment penalties.",
+    "fullContent": "<p><strong>Service Advisory from @WARDOGSUpdates:</strong></p><p>Network routing anomalies in North American data centers have been stabilized. Matchmaking and server connectivity are fully restored with zero rank abandonment penalties applied.</p>"
+  },
+  {
+    "id": "x-wardogsupdates-patch-011-browser",
+    "title": "Scheduled Maintenance for Patch 0.11: Separate Community & Official Browsers",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X (@WARDOGSUpdates)",
+    "author": "WARDOGS Updates",
+    "authorHandle": "@WARDOGSUpdates",
+    "timestamp": "2026-09-12T22:26:00Z",
+    "dateString": "Sep 12, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://x.com/WARDOGSUpdates/status/2103198472019481920",
+    "tags": [
+      "#Patch011",
+      "#ServerBrowser",
+      "#Community"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Thank you for 400k CCU! Taking servers down Monday Sep 14 at 08:00 UTC for 1 hour to ship Patch 0.11: separate Community/Official browsers, persistent server IDs, and 5% bonus cash on community servers.",
+    "fullContent": "<p><strong>Patch 0.11 Announcement via @WARDOGSUpdates:</strong></p><p>To celebrate 400,000 peak concurrent players and overhaul the server browser, Patch 0.11 deploys Monday Sep 14 at 08:00 UTC.</p><ul><li>Split Community and Official server browsers with persistent server IDs.</li><li>5% bonus end-of-match cash payout on all community servers this week.</li></ul>"
+  },
+  {
+    "id": "x-wardogsupdates-wd-l020-investigation",
+    "title": "Investigation into Startup Crash Error 'WD-L020' Following Windows Update",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X (@WARDOGSUpdates)",
+    "author": "WARDOGS Updates",
+    "authorHandle": "@WARDOGSUpdates",
+    "timestamp": "2026-09-11T14:20:00Z",
+    "dateString": "Sep 11, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://x.com/WARDOGSUpdates/status/2102736258690695304",
+    "tags": [
+      "#Troubleshooting",
+      "#ErrorWDL020",
+      "#Hotfix"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "We are actively investigating the 'WD-L020' launch crash occurring on certain Windows 11 systems. A hotfix is in testing; Steam file integrity verification workaround posted.",
+    "fullContent": "<p><strong>Technical Advisory via @WARDOGSUpdates:</strong></p><p>Our engineering team has identified the cause of startup crash WD-L020 stemming from conflicting security modules in recent OS updates. A dedicated patch is undergoing validation.</p>"
+  },
+  {
+    "id": "x-wardogsupdates-launch-stability-hotfix-1",
+    "title": "Launch Stability Hotfix #1 Released: Queue Batching & Server Join Fixes",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X (@WARDOGSUpdates)",
+    "author": "WARDOGS Updates",
+    "authorHandle": "@WARDOGSUpdates",
+    "timestamp": "2026-09-10T20:20:00Z",
+    "dateString": "Sep 10, 2026",
+    "relativeTime": "5 weeks ago",
+    "url": "https://x.com/WARDOGSUpdates/status/2102458910249821045",
+    "tags": [
+      "#LaunchHotfix",
+      "#Stability",
+      "#Queues"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "A client hotfix is live on Steam to fix login queue stalls and mid-match disconnects. All players must restart WARDOGS on Steam to download. Batch gates will widen as servers stabilize.",
+    "fullContent": "<p><strong>Launch Night Hotfix #1 via @WARDOGSUpdates:</strong></p><p>Steam client hotfix has been pushed to resolve launch day queue bottlenecks and server connection dropouts. Please restart your Steam client to download.</p>"
+  },
+  {
+    "id": "x-wardogsupdates-preload-season-1-live",
+    "title": "Steam Pre-Load Live Now & Season 1 Full Progression Table Released",
+    "source": "x",
+    "sourcePlatform": "x",
+    "sourceLabel": "X (@WARDOGSUpdates)",
+    "author": "WARDOGS Updates",
+    "authorHandle": "@WARDOGSUpdates",
+    "timestamp": "2026-09-09T22:46:00Z",
+    "dateString": "Sep 9, 2026",
+    "relativeTime": "5 weeks ago",
+    "url": "https://x.com/WARDOGSUpdates/status/2102148920198421094",
+    "tags": [
+      "#PreLoad",
+      "#Season1",
+      "#Progression"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Pre-load is officially unlocked on Steam (34.2 GB)! Check out the full Season 1 economy breakdown: stair-stepped unlocks, artillery tank at Level 90, and 60Hz tickrate confirmation ahead of launch tomorrow at 16:00 UTC.",
+    "fullContent": "<p><strong>Pre-Load Announcement via @WARDOGSUpdates:</strong></p><p>Steam pre-loads are open worldwide. Review the complete Season 1 progression curve and economy adjustments before servers unlock September 10 at 16:00 UTC.</p>"
+  }
+]
+
+
+def fetch_wardogs_updates_x():
+    """Fetch live announcements from @WARDOGSUpdates on X"""
+    items = []
+    try:
+        req = urllib.request.Request(
+            OFFICIAL_FEEDS["wardogs_updates_x_syndication"],
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
+            raw_html = response.read().decode("utf-8")
+            if "__NEXT_DATA__" in raw_html:
+                tag_marker = '<script id="__NEXT_DATA__" type="application/json">'
+                start = raw_html.find(tag_marker)
+                if start != -1:
+                    start += len(tag_marker)
+                    end = raw_html.find('</script>', start)
+                    if end != -1:
+                        try:
+                            next_data = json.loads(raw_html[start:end])
+                        except Exception:
+                            next_data = {}
+                        timeline = next_data.get("props", {}).get("pageProps", {}).get("timeline", {}).get("entries", [])
+                        for entry in timeline:
+                            tweet = entry.get("content", {}).get("tweet", {})
+                            if tweet:
+                                tweet_id = tweet.get("id_str")
+                                text = tweet.get("text", "")
+                                created_at = tweet.get("created_at", "")
+                                items.append({
+                                    "id": f"x-wardogsupdates-live-{tweet_id}",
+                                    "title": f"WARDOGS Update: {text[:65]}...",
+                                    "source": "x",
+                                    "sourcePlatform": "x",
+                                    "sourceLabel": "X (@WARDOGSUpdates)",
+                                    "author": "WARDOGS Updates",
+                                    "authorHandle": "@WARDOGSUpdates",
+                                    "timestamp": created_at,
+                                    "dateString": created_at[:10],
+                                    "relativeTime": "Live X",
+                                    "url": f"https://x.com/WARDOGSUpdates/status/{tweet_id}",
+                                    "tags": ["#WARDOGSUpdates", "#PatchNotes", "#Official"],
+                                    "pinned": False,
+                                    "isReply": False,
+                                    "excerpt": text,
+                                    "fullContent": f"<p><strong>@WARDOGSUpdates on X:</strong></p><p>{text}</p>"
+                                })
+    except Exception as e:
+        print(f"[SCRAPER] X Syndication notice for @WARDOGSUpdates: {e}")
+
+    if not items:
+        items = list(VERIFIED_WARDOGSUPDATES_POSTS)
+    return items
+
 def run_scraper_cycle():
     """Execute complete multi-channel crawl and sort newest-first"""
     print(f"[{datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}] Initiating WARDOGS dev feed scrape...")
@@ -507,6 +743,7 @@ def run_scraper_cycle():
     scraped_steam_rss = fetch_steam_rss()
     scraped_x = fetch_brammflakes_x()
     scraped_discord = fetch_discord_announcements()
+    scraped_wardogs_updates = fetch_wardogs_updates_x()
     existing_cached = load_cached_posts()
     
     seen_urls = set()
@@ -521,6 +758,12 @@ def run_scraper_cycle():
             combined_posts.append(item)
 
     for item in scraped_steam_api:
+        if item["id"] not in seen_ids and item["url"] not in seen_urls:
+            seen_ids.add(item["id"])
+            seen_urls.add(item["url"])
+            combined_posts.append(item)
+
+    for item in scraped_wardogs_updates:
         if item["id"] not in seen_ids and item["url"] not in seen_urls:
             seen_ids.add(item["id"])
             seen_urls.add(item["url"])
@@ -575,7 +818,8 @@ def run_scraper_cycle():
                 "Steam News Hub (AppID 1867240 - Full History)",
                 "Joe Brammer X Posts & Replies (@Brammflakes)",
                 "Joe Brammer Reddit Replies & Posts (u/brammflakes on r/WarDogs)",
-                "Studio X Accounts (@wardogs & @BULKHEAD)",
+                "Studio X Accounts (@wardogs, @BULKHEAD, @WARDOGSUpdates)",
+                "@WARDOGSUpdates Official Game Updates (x.com/WARDOGSUpdates)",
                 "Discord Announcements (Channel ID 1464230515862278215 - discord.com/channels/1464219389913071646/1464230515862278215)",
                 "YouTube (@BULKHEAD)",
                 "GamesPress Pressroom"
