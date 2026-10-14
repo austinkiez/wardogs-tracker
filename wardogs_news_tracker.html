@@ -1258,7 +1258,7 @@
         <span>WARDOGS DEV INTEL // RADAR ACTIVE</span>
       </div>
       <div class="status-item">
-        <span>LIVE PLAYERS: <strong id="top-bar-player-count" style="color: #34d399;">98,765 ONLINE</strong></span>
+        <span>LIVE PLAYERS: <strong id="top-bar-player-count" style="color: #34d399;">100,813 ONLINE</strong></span>
       </div>
       <div class="status-item">
         <span>REVIEWS: <strong style="color: #38bdf8;">MOSTLY POSITIVE (79%)</strong></span>
@@ -1346,7 +1346,7 @@
             </div>
           </div>
           <div class="telemetry-main-metric">
-            <div class="telemetry-big-number" id="live-player-count">98,765</div>
+            <div class="telemetry-big-number" id="live-player-count">100,813</div>
             <span style="font-size: 0.8rem; font-weight: 600; color: #34d399; font-family: var(--font-mono);">PLAYERS ONLINE</span>
           </div>
           <div class="telemetry-sub-metric">
@@ -2989,28 +2989,31 @@
       const lastCheckedEl = document.getElementById("player-last-checked");
 
       const steamAppId = "1867240";
-      const targetSteamUrl = `https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${steamAppId}`;
+      const targetSteamUrl = "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=" + steamAppId;
 
       // Multi-tier proxy & API strategy:
-      // 1. Local backend server (/api/players) - zero CORS issues when running server.py
-      // 2. High-speed raw CORS proxies (corsproxy.io, codetabs)
-      // 3. Fallback JSON proxy wrappers (allorigins /get)
-      // 4. Static local JSON cache (wardogs_news.json)
+      // 1. Local backend server (/api/players) - direct Valve fetch, no CORS restrictions
+      // 2. CORSProxy.io (Fixed query syntax: https://corsproxy.io/?<url>)
+      // 3. CodeTabs Proxy (https://api.codetabs.com/v1/proxy?quest=<url>)
+      // 4. AllOrigins JSON Wrapper (https://api.allorigins.win/get?url=<url>)
+      // 5. Steam Community In-Game Scraper via proxy
+      // 6. Local Scraper Cache (wardogs_news.json)
       const sources = [
         { name: "Local Server API", url: "/api/players", type: "direct" },
-        { name: "CORSProxy.io", url: `https://corsproxy.io/?url=${encodeURIComponent(targetSteamUrl)}`, type: "direct" },
-        { name: "CodeTabs Proxy", url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetSteamUrl)}`, type: "direct" },
-        { name: "AllOrigins JSON Wrapper", url: `https://api.allorigins.win/get?url=${encodeURIComponent(targetSteamUrl)}`, type: "allorigins_wrapper" },
+        { name: "CORSProxy.io", url: "https://corsproxy.io/?" + encodeURIComponent(targetSteamUrl), type: "direct" },
+        { name: "CodeTabs Proxy", url: "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetSteamUrl), type: "direct" },
+        { name: "AllOrigins JSON Wrapper", url: "https://api.allorigins.win/get?url=" + encodeURIComponent(targetSteamUrl), type: "allorigins_wrapper" },
+        { name: "Steam Community In-Game", url: "https://corsproxy.io/?" + encodeURIComponent("https://steamcommunity.com/app/1867240"), type: "community_html" },
         { name: "Local Scraper Cache", url: "wardogs_news.json", type: "cache_json" },
         { name: "Backend News API", url: "/api/news", type: "cache_json" }
       ];
 
       for (const src of sources) {
         try {
-          console.log(`[STEAM-SYNC] Polling live player count via: ${src.name}`);
+          console.log("[STEAM-SYNC] Polling live player count via: " + src.name);
           const res = await fetch(src.url, { cache: "no-store" });
           if (!res.ok) {
-            console.warn(`[STEAM-SYNC] ${src.name} returned HTTP ${res.status}`);
+            console.warn("[STEAM-SYNC] " + src.name + " returned HTTP " + res.status);
             continue;
           }
 
@@ -3023,6 +3026,12 @@
                 count = parsed?.response?.player_count;
               } catch(e) {}
             }
+          } else if (src.type === "community_html") {
+            const htmlText = await res.text();
+            const match = htmlText.match(/([0-9,]+)\s+In-Game/i);
+            if (match && match[1]) {
+              count = parseInt(match[1].replace(/,/g, ''), 10);
+            }
           } else if (src.type === "cache_json") {
             const cacheData = await res.json();
             count = cacheData?.metadata?.live_player_count;
@@ -3032,47 +3041,74 @@
           }
 
           if (count && count > 0) {
-            console.log(`[STEAM-SYNC] Live player count successfully retrieved: ${count} (Source: ${src.name})`);
-            setPlayerCountDisplay(count);
+            console.log("[STEAM-SYNC] Live player count successfully retrieved: " + count + " (Source: " + src.name + ")");
+            setPlayerCountDisplay(count, true); // Persist to localStorage
+            const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             if (lastCheckedEl) {
-              const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              lastCheckedEl.textContent = `Synced: ${nowTime}`;
+              lastCheckedEl.textContent = "Synced: " + nowTime;
             }
             if (statusBadge) {
               statusBadge.textContent = "STEAMDB LIVE";
               statusBadge.style.color = "var(--accent-green)";
-              statusBadge.title = `Live data from Valve Steam API via ${src.name}`;
+              statusBadge.title = "Live data from Valve/SteamDB via " + src.name;
             }
-            return; // Success, end polling chain
+            return; // Success
           }
         } catch (err) {
-          console.warn(`[STEAM-SYNC] Endpoint failed (${src.name}):`, err.message);
+          console.warn("[STEAM-SYNC] Endpoint failed (" + src.name + "):", err.message);
         }
       }
 
-      // If all live endpoints were blocked (e.g. offline, or Brave Shields blocking third-party proxies on file://)
-      console.warn("[STEAM-SYNC] All live endpoints failed or blocked by browser security. Displaying cached baseline.");
+      // If all live network endpoints failed (e.g. strict Brave Shields blocking on file://)
+      console.warn("[STEAM-SYNC] All live endpoints failed or blocked. Hydrating from storage.");
+      const savedCount = localStorage.getItem("wardogs_live_player_count");
+      if (savedCount) {
+        setPlayerCountDisplay(savedCount, false);
+      }
       if (statusBadge) {
         statusBadge.textContent = "STEAMDB CACHED";
         statusBadge.style.color = "var(--accent-amber)";
-        statusBadge.title = "Local browser security (Brave Shields or file://) prevented live proxy fetch. Start 'python3 server.py' or allow CORS for live numbers.";
+        statusBadge.title = "Running on saved cache. Start 'python3 server.py' or allow CORS proxies in Brave for live polling.";
       }
     }
 
-    function setPlayerCountDisplay(num) {
+    function setPlayerCountDisplay(num, persist = true) {
+      if (!num) return;
       const formatted = Number(num).toLocaleString();
       const el = document.getElementById("live-player-count");
       if (el) {
         el.textContent = formatted;
+        el.style.transition = "color 0.3s ease";
+        el.style.color = "#34d399";
+        setTimeout(() => { if (el) el.style.color = "#ffffff"; }, 600);
       }
       const topBarEl = document.getElementById("top-bar-player-count");
       if (topBarEl) {
-        topBarEl.textContent = `${formatted} ONLINE`;
+        topBarEl.textContent = formatted + " ONLINE";
+      }
+
+      if (persist) {
+        try {
+          localStorage.setItem("wardogs_live_player_count", num);
+          localStorage.setItem("wardogs_live_player_synced", new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        } catch (e) {}
       }
     }
 
     // Init
     document.addEventListener("DOMContentLoaded", () => {
+      // Immediately hydrate from localStorage if available to prevent default 98,765 flash
+      try {
+        const cachedPlayerCount = localStorage.getItem("wardogs_live_player_count");
+        const cachedPlayerSynced = localStorage.getItem("wardogs_live_player_synced");
+        if (cachedPlayerCount) {
+          setPlayerCountDisplay(cachedPlayerCount, false);
+          const lastEl = document.getElementById("player-last-checked");
+          if (lastEl && cachedPlayerSynced) {
+            lastEl.textContent = "Synced: " + cachedPlayerSynced;
+          }
+        }
+      } catch(e) {}
       renderNewsCards();
       loadLatestNewsFromBackend();
       updateLiveSteamNewsFeed();
