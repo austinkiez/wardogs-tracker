@@ -1181,9 +1181,109 @@
       }
     }
 
+  
+    /* Rotating WARDOGS Store Page Wallpapers */
+    .bg-wallpaper-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      overflow: hidden;
+      background-color: #070a0e;
+    }
+
+    .bg-wallpaper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 1.8s ease-in-out, transform 12s ease-out;
+      transform: scale(1.05);
+    }
+
+    .bg-wallpaper.active {
+      opacity: 0.35;
+      transform: scale(1.0);
+    }
+
+    .bg-wallpaper-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(8, 11, 16, 0.72) 0%, rgba(6, 9, 13, 0.92) 60%, #070a0e 100%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 4px);
+      pointer-events: none;
+    }
+
+    .wallpaper-control-pill {
+      position: fixed;
+      bottom: 12px;
+      right: 16px;
+      z-index: 100;
+      background: rgba(10, 13, 18, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      backdrop-filter: blur(4px);
+    }
+
+    .wallpaper-next-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-amber);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0 4px;
+    }
+
+    .wallpaper-next-btn:hover {
+      color: #fff;
+    }
+
+    .pulse-ring-amber {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-amber);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--accent-amber);
+    }
+
   </style>
 </head>
 <body>
+  <!-- Rotating WARDOGS Store Page Background Carousel -->
+  <div class="bg-wallpaper-container" id="bg-wallpaper-container">
+    <div class="bg-wallpaper active" style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1867240/59d4daf753bd5d982e6675f7eee363bc817c574e/header.jpg');" title="WARDOGS Key Artwork"></div>
+    <div class="bg-wallpaper" style="background-image: url('https://team17.com/hs-fs/hubfs/WD_Screenshot_Littlebird_1_WD1.jpg');" title="Littlebird Mountain Combat"></div>
+    <div class="bg-wallpaper" style="background-image: url('https://clan.fastly.steamstatic.com/images/45973082/7debc6be03803d32c57148cf617f158fbfbdc24b.png');" title="Season 2 Dynamic Rain & Armor"></div>
+    <div class="bg-wallpaper" style="background-image: url('https://images.steamusercontent.com/ugc/15496469382899849873/706A23C1524D213850B28B4A4FA70256B886C2A3/?imw=1920&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false');" title="Industrial Valley Battlefield"></div>
+    <div class="bg-wallpaper" style="background-image: url('https://clan.fastly.steamstatic.com/images/45973082/15687fd9ac4952074dabc9ba916a2e695762a39c.png');" title="Mountain Fortress Outpost"></div>
+    <div class="bg-wallpaper-overlay"></div>
+    <div class="wallpaper-control-pill">
+      <span class="pulse-ring-amber"></span>
+      <span id="wallpaper-caption">WARDOGS STOREFRONT CAPTURES (ROTATING)</span>
+      <button onclick="rotateBackgroundWallpaper()" class="wallpaper-next-btn" title="Next Wallpaper">❯</button>
+    </div>
+  </div>
+
 
   <!-- Top Real-time Bar -->
   <div class="top-status-bar">
@@ -1233,14 +1333,14 @@
       <!-- Aligned 3-Card Telemetry & Countdown Matrix -->
       <div class="header-widgets-grid">
         
-        <!-- Card 1: Season 2 Countdown Widget (FAR LEFT) -->
-        <div class="telemetry-card telemetry-card-countdown" title="Season 2 Deployment Window">
+        <!-- Card 1: Season 2 Countdown Widget (FAR LEFT - LOCAL TIMEZONE DEPENDENT) -->
+        <div class="telemetry-card telemetry-card-countdown" title="Season 2 Deployment Window (Local Timezone)">
           <div class="telemetry-card-header">
             <div class="telemetry-header-title" style="color: var(--accent-amber);">
               <span class="telemetry-live-dot" style="background: var(--accent-amber); box-shadow: 0 0 6px var(--accent-amber);"></span>
               <span>SEASON 02 DEPLOYMENT</span>
             </div>
-            <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent-amber); font-weight: 700;">OCT 15</span>
+            <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent-amber); font-weight: 700;" id="cd-local-tz-badge">LOCAL TIME</span>
           </div>
           <div class="telemetry-main-metric">
             <div class="countdown-timer-aligned" id="countdown-timer">
@@ -1253,18 +1353,18 @@
                 <div class="timer-lbl">Hours</div>
               </div>
               <div class="timer-segment-aligned">
-                <div class="timer-num" id="cd-mins">26</div>
+                <div class="timer-num" id="cd-mins">17</div>
                 <div class="timer-lbl">Mins</div>
               </div>
               <div class="timer-segment-aligned">
-                <div class="timer-num" id="cd-secs">50</div>
+                <div class="timer-num" id="cd-secs">30</div>
                 <div class="timer-lbl">Secs</div>
               </div>
             </div>
           </div>
           <div class="telemetry-sub-metric">
-            <span>Target: <strong>Oct 15, 2026 // 07:00 UTC</strong></span>
-            <span style="font-size: 0.68rem; color: var(--text-dim);">Downtime ~2h</span>
+            <span id="countdown-target-local">Target: <strong>Calculating local time...</strong></span>
+            <span id="countdown-tz-name" style="font-size: 0.68rem; color: var(--accent-amber);">LOCAL TIMEZONE</span>
           </div>
         </div>
 
@@ -2452,14 +2552,39 @@
       }
     }
 
-    // Countdown to Season 2 (October 15, 2026, 07:00 UTC)
+    
+    // Background Wallpaper Rotation
+    const WALLPAPER_TITLES = [
+      "1/5: WARDOGS Official Key Art",
+      "2/5: Littlebird Mountain Air Assault",
+      "3/5: Season 02 Dynamic Rain & Armor",
+      "4/5: Derelict Industrial Valley Combat",
+      "5/5: Mountain Outpost Fortifications"
+    ];
+    let currentWallpaperIdx = 0;
+
+    function rotateBackgroundWallpaper() {
+      const wallpapers = document.querySelectorAll(".bg-wallpaper");
+      if (!wallpapers || wallpapers.length <= 1) return;
+      wallpapers[currentWallpaperIdx].classList.remove("active");
+      currentWallpaperIdx = (currentWallpaperIdx + 1) % wallpapers.length;
+      wallpapers[currentWallpaperIdx].classList.add("active");
+
+      const captionEl = document.getElementById("wallpaper-caption");
+      if (captionEl) {
+        captionEl.textContent = `STORE CAPTURE ${WALLPAPER_TITLES[currentWallpaperIdx] || ""}`;
+      }
+    }
+
+    // Countdown to Season 2 (Timezone-dependent based on user's current local timezone)
     function updateCountdown() {
-      const targetTime = new Date("2026-10-15T07:00:00Z").getTime();
-      const now = new Date().getTime();
-      const diff = targetTime - now;
+      // 07:00 UTC on October 15, 2026 (exact epoch moment worldwide)
+      const targetTimeUtc = new Date("2026-10-15T07:00:00Z");
+      const now = new Date();
+      const diff = targetTimeUtc.getTime() - now.getTime();
 
       if (diff <= 0) {
-        document.getElementById("countdown-timer").innerHTML = "<div style='color: var(--accent-amber); font-weight: 700;'>SEASON 2 DEPLOYED!</div>";
+        document.getElementById("countdown-timer").innerHTML = "<div style='color: var(--accent-amber); font-weight: 700; padding: 4px 0;'>SEASON 2 DEPLOYED!</div>";
         return;
       }
 
@@ -2468,18 +2593,46 @@
       const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-      document.getElementById("cd-days").textContent = String(days).padStart(2, '0');
-      document.getElementById("cd-hours").textContent = String(hours).padStart(2, '0');
-      document.getElementById("cd-mins").textContent = String(mins).padStart(2, '0');
-      document.getElementById("cd-secs").textContent = String(secs).padStart(2, '0');
+      const dEl = document.getElementById("cd-days");
+      const hEl = document.getElementById("cd-hours");
+      const mEl = document.getElementById("cd-mins");
+      const sEl = document.getElementById("cd-secs");
+
+      if (dEl) dEl.textContent = String(days).padStart(2, '0');
+      if (hEl) hEl.textContent = String(hours).padStart(2, '0');
+      if (mEl) mEl.textContent = String(mins).padStart(2, '0');
+      if (sEl) sEl.textContent = String(secs).padStart(2, '0');
+
+      // User's Local Timezone Formatting
+      const localDateStr = targetTimeUtc.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      const localTimeStr = targetTimeUtc.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+      const userTzName = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local";
+
+      const targetEl = document.getElementById("countdown-target-local");
+      if (targetEl) {
+        targetEl.innerHTML = `Target: <strong>${localDateStr} // ${localTimeStr}</strong>`;
+      }
+      const badgeEl = document.getElementById("cd-local-tz-badge");
+      if (badgeEl) {
+        const tzAbbr = localTimeStr.split(" ").slice(-1)[0] || "LOCAL";
+        badgeEl.textContent = `${tzAbbr}`;
+      }
+      const tzNameEl = document.getElementById("countdown-tz-name");
+      if (tzNameEl) {
+        tzNameEl.textContent = `${userTzName}`;
+      }
     }
 
-    // Clock
+    // User's Local Clock in Top Status Bar
     function updateClock() {
       const now = new Date();
-      const utcString = now.toUTCString().split(" ")[4];
-      document.getElementById("utc-clock").textContent = "UTC: " + utcString;
+      const localTime = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' });
+      const el = document.getElementById("utc-clock");
+      if (el) {
+        el.innerHTML = `<span>LOCAL TIME: <strong>${localTime}</strong></span>`;
+      }
     }
+
 
     // Try fetching from backend API if available, else use embedded verified posts
     async function loadLatestNewsFromBackend() {
@@ -2584,6 +2737,7 @@
       updateClock();
       setInterval(updateCountdown, 1000);
       setInterval(updateClock, 1000);
+      setInterval(rotateBackgroundWallpaper, 10000); // Rotate store wallpapers every 10s
 
       // Auto poll every 5 minutes by default
       updatePollingInterval(300);
