@@ -193,7 +193,7 @@ def fetch_brammflakes_x():
                             "timestamp": created_at,
                             "dateString": created_at[:10],
                             "relativeTime": "Live X",
-                            "url": f"https://x.com/brammflakes/status/{tweet_id}",
+                            "url": f"https://x.com/Brammflakes/status/{tweet_id}",
                             "tags": ["#JoeBrammer", "#XPost" if not is_reply else "#DevReply"],
                             "pinned": False,
                             "isReply": is_reply,
