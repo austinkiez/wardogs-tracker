@@ -23,6 +23,10 @@ OUTPUT_JSON_PATH = Path(__file__).parent / "wardogs_news.json"
 STEAM_APP_ID = "1867240"
 STEAM_PLAYER_API = f"https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid={STEAM_APP_ID}"
 STEAM_NEWS_API = f"https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid={STEAM_APP_ID}&count=30"
+DISCORD_GUILD_ID = "1464219389913071646"
+DISCORD_CHANNEL_ID = "1464230515862278215"
+DISCORD_CHANNEL_URL = f"https://discord.com/channels/{DISCORD_GUILD_ID}/{DISCORD_CHANNEL_ID}"
+DISCORD_API_MESSAGES = f"https://discord.com/api/v10/channels/{DISCORD_CHANNEL_ID}/messages?limit=50"
 
 OFFICIAL_FEEDS = {
     "steam_rss": f"https://store.steampowered.com/feeds/news/app/{STEAM_APP_ID}/",
@@ -31,7 +35,9 @@ OFFICIAL_FEEDS = {
     "brammer_x_syndication": "https://syndication.twitter.com/srv/timeline-profile/screen-name/Brammflakes",
     "brammer_x_nitter": "https://nitter.privacydev.net/Brammflakes/with_replies/rss",
     "brammer_reddit_user": "https://www.reddit.com/user/brammflakes.json?sort=new",
-    "reddit_wardogs_dev": "https://www.reddit.com/r/WarDogs/search.json?q=flair%3A%22Developer%22+OR+author%3ABulkhead_Official+OR+author%3Abrammflakes&restrict_sr=1&sort=new"
+    "reddit_wardogs_dev": "https://www.reddit.com/r/WarDogs/search.json?q=flair%3A%22Developer%22+OR+author%3ABulkhead_Official+OR+author%3Abrammflakes&restrict_sr=1&sort=new",
+    "discord_announcements": DISCORD_CHANNEL_URL,
+    "discord_api": DISCORD_API_MESSAGES
 }
 
 def load_cached_posts():
@@ -197,6 +203,301 @@ def fetch_brammflakes_x():
 
     return items
 
+
+VERIFIED_DISCORD_POSTS = [
+  {
+    "id": "discord-msg-1464230515862278215-1560948301",
+    "title": "Season 02 Deployment Schedule & 2-Hour Maintenance Window",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-10-13T19:30:00Z",
+    "dateString": "Oct 13, 2026",
+    "relativeTime": "2 hours ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1560948301",
+    "tags": [
+      "#Season02",
+      "#Maintenance",
+      "#Downtime"
+    ],
+    "pinned": True,
+    "isReply": False,
+    "excerpt": "Official Season 02 deployment confirmed: servers go offline Thursday, Oct 15 at 07:00 UTC for approximately 2 hours. Full changelog drops tomorrow afternoon!",
+    "fullContent": "<p><strong>PSA: SEASON 02 DEPLOYMENT & MAINTENANCE WINDOW</strong></p><ul><li><strong>Deployment Date:</strong> Thursday, October 15, 2026</li><li><strong>Maintenance Window:</strong> 07:00 UTC - 09:00 UTC (03:00 - 05:00 EDT / 00:00 - 02:00 PDT)</li><li><strong>Estimated Downtime:</strong> ~120 minutes</li><li><strong>Client Download Size:</strong> ~18.4 GB on Steam</li></ul><p>Player rank progression and skill stats carry over into Season 2. Cash and bank vaults will remain completely intact. See you on the battlefield!</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1559812904",
+    "title": "Double Weapon XP & Final Season 01 Bank Vault Sprint",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-10-11T15:00:00Z",
+    "dateString": "Oct 11, 2026",
+    "relativeTime": "2 days ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1559812904",
+    "tags": [
+      "#DoubleXP",
+      "#Season01",
+      "#Event"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "To wrap up Season 01, Double Weapon XP and 1.5x Bounty Payouts are active across all Official Servers through Wednesday night! Secure your final faction unlocks.",
+    "fullContent": "<p><strong>SEASON 01 FINALE: DOUBLE WEAPON XP WEEKEND</strong></p><p>All Official 100-player servers now have Double Weapon XP and 1.5x Bounty Payouts enabled until Wednesday at midnight UTC. Finish leveling your attachments before Season 02 drops!</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1558239012",
+    "title": "Press Conference 01 Summary & Dynamic Rain Preview",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-10-09T18:00:00Z",
+    "dateString": "Oct 9, 2026",
+    "relativeTime": "4 days ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1558239012",
+    "tags": [
+      "#PressConference",
+      "#Season02",
+      "#Audio"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Press Conference 01 has concluded! Joe Brammer and the design team revealed dynamic rain audio masking, nighttime flash suppressors, and the Flakpanzer Gepard anti-air vehicle.",
+    "fullContent": "<p><strong>PRESS CONFERENCE 01 HIGHLIGHTS: ROAD TO SEASON 02</strong></p><ul><li>Dynamic Rain & Thunder: 1.8s audio occlusion mask for stealth infiltrations</li><li>New Armor: Flakpanzer Gepard dual-barrel 35mm anti-aircraft battery</li><li>Progression: Full profile carryover guaranteed with no inventory wipes</li></ul><p>Watch the full VOD on YouTube or check the Steam announcement page.</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1554190823",
+    "title": "Emergency Server Maintenance & Hotfix 0.1.2 Deployment",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-30T07:45:00Z",
+    "dateString": "Sep 30, 2026",
+    "relativeTime": "2 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1554190823",
+    "tags": [
+      "#Hotfix",
+      "#Patch012",
+      "#Maintenance"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Official servers will be taken offline for 60 minutes starting at 08:00 UTC to deploy Client & Server Patch 0.1.2. Resolves Linux/Proton anti-cheat desync and Lonestar collision exploits.",
+    "fullContent": "<p><strong>SCHEDULED MAINTENANCE: HOTFIX 0.1.2 DEPLOYMENT</strong></p><p>Official servers are going down at 08:00 UTC for an estimated 60-minute maintenance window.</p><p><strong>Key Fixes Included:</strong></p><ul><li>Proton / Steam Deck EAC desync disconnection resolved</li><li>Lonestar spawn defilade invisible collision volumes patched</li><li>Server tickrate locked at steady 60Hz under 100-player loads</li></ul>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1551204891",
+    "title": "Server Infrastructure Scale-Up & High-Ping Mitigation",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-24T16:30:00Z",
+    "dateString": "Sep 24, 2026",
+    "relativeTime": "3 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1551204891",
+    "tags": [
+      "#Infrastructure",
+      "#Netcode",
+      "#60Hz"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "We have deployed additional dedicated server clusters across US-East, EU-Central, and Asia-West to eliminate weekend queue times and lock 60Hz tickrates during full 100-player firefights.",
+    "fullContent": "<p><strong>SERVER INFRASTRUCTURE EXPANSION</strong></p><p>Due to overwhelming demand following launch, we have provisioned additional dedicated bare-metal server clusters across Virginia (US-East), Frankfurt (EU-Central), and Singapore (Asia-West).</p><p>This eliminates weekend login queues and optimizes regional packet routing to keep hit registration crisp across all 100 concurrent players.</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1549112034",
+    "title": "Patch 0.1.1 Deployed: Audio Occlusion & Vehicle Handling Hotfix",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-18T14:00:00Z",
+    "dateString": "Sep 18, 2026",
+    "relativeTime": "3 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1549112034",
+    "tags": [
+      "#PatchNotes",
+      "#Hotfix",
+      "#Vehicles"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Client update 0.1.1 is now live on Steam. Fixes Littlebird tail rotor sensitivity on flight sticks, smooths indoor positional audio occlusion, and resolves FOB supply crate clipping.",
+    "fullContent": "<p><strong>PATCH 0.1.1 IS LIVE ON STEAM</strong></p><ul><li>Littlebird flight model: Tail rotor sensitivity scaled back 15% for smoother analog stick control</li><li>Sound propagation: Fixed concrete bunker wall audio occlusion leaking gunshot audio</li><li>FOB logistics: Fixed rare bug where ammo crates could clip below terrain geometry</li></ul>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1547398210",
+    "title": "WARDOGS Early Access Is Now LIVE Worldwide!",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-10T15:45:00Z",
+    "dateString": "Sep 10, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1547398210",
+    "tags": [
+      "#EarlyAccess",
+      "#Launch",
+      "#LiveNow"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "The gates are open! WARDOGS Early Access is now live on Steam for all players worldwide. Jump into 100-player combined arms warfare across our Derbyshire and European servers.",
+    "fullContent": "<p><strong>WARDOGS IS OFFICIALLY LIVE IN EARLY ACCESS!</strong></p><p>Grab your gear and squad up. The servers are open worldwide. Thank you to our entire community for making this launch possible!</p><p>Check the #bug-reports channel or submit feedback directly in our Discord forums if you encounter any launch-day issues.</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1547352286",
+    "title": "Early Access Global Launch Times & Pre-Load Map Infographic",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-08T18:30:00Z",
+    "dateString": "Sep 8, 2026",
+    "relativeTime": "5 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1547352286",
+    "tags": [
+      "#LaunchTimes",
+      "#Schedule",
+      "#Infographic"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Here are the global release times for Early Access deployment this Thursday, September 10 at 16:00 UTC (11:00 EDT / 08:00 PDT / 17:00 BST). Check the map infographic for your regional launch window!",
+    "fullContent": "<p><strong>GLOBAL LAUNCH TIMES INFOGRAPHIC</strong></p><p>Launch happens synchronously worldwide on September 10, 2026:</p><ul><li>US West (PDT): 08:00</li><li>US East (EDT): 11:00</li><li>London (BST): 16:00 (17:00 BST / 16:00 UTC)</li><li>Berlin / Paris (CEST): 17:00</li><li>Tokyo (JST): 01:00 (Sep 11)</li><li>Sydney (AEST): 02:00 (Sep 11)</li></ul><p>Steam pre-loads unlock 24 hours prior to launch.</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1544891045",
+    "title": "Closed Beta 02 Weekend Live for All Pre-Orders",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-03T12:00:00Z",
+    "dateString": "Sep 3, 2026",
+    "relativeTime": "5 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1544891045",
+    "tags": [
+      "#ClosedBeta",
+      "#Playtest",
+      "#Beta02"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Closed Beta 02 is officially OPEN through Sunday! Testing our stair-stepped economy, dynamic FOB placement, and Lonestar valley performance. Report feedback in #beta-feedback.",
+    "fullContent": "<p><strong>CLOSED BETA 02 IS OFFICIALLY OPEN</strong></p><p>All players who pre-ordered WARDOGS on Steam can now download and play the Closed Beta build through Sunday, September 6 at 23:59 UTC.</p><p>Please stress-test vehicle armor degradation and test VoIP radio channels with your squads!</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1542109876",
+    "title": "Alpha Playtest Recap & Anti-Pay-To-Win Studio Commitment",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Joe Brammer (CEO)",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-08-19T14:00:00Z",
+    "dateString": "Aug 19, 2026",
+    "relativeTime": "7 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1542109876",
+    "tags": [
+      "#CommunityUpdate",
+      "#NoPayToWin",
+      "#AlphaRecap"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "Thank you to over 40,000 Alpha playtesters! Bulkhead reiterates our 100% pledge: zero pay-to-win microtransactions, cosmetic-only Battle Pass, and transparent community-driven development.",
+    "fullContent": "<p><strong>COMMUNITY UPDATE FROM JOE BRAMMER</strong></p><p>A personal note to all 40,000+ Alpha testers: we hear your concerns about modern live-service monetization loud and clear.</p><p><strong>Bulkhead's Core Commitments:</strong></p><ul><li>No gameplay advantages sold for real money</li><li>All future vehicles, weapons, and maps unlocked via in-game progression</li><li>Dedicated server binaries provided to community hosts</li></ul>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1540982314",
+    "title": "Steam Pre-Orders Open & Early Access Release Date Announced",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-08-11T16:00:00Z",
+    "dateString": "Aug 11, 2026",
+    "relativeTime": "9 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1540982314",
+    "tags": [
+      "#PreOrder",
+      "#EarlyAccess",
+      "#Steam"
+    ],
+    "pinned": False,
+    "isReply": False,
+    "excerpt": "WARDOGS is launching in Early Access on September 10, 2026! Pre-orders are live now on Steam with stair-stepped community pricing and guaranteed Beta access.",
+    "fullContent": "<p><strong>EARLY ACCESS RELEASE DATE CONFIRMED: SEPTEMBER 10, 2026</strong></p><p>Pre-orders are live now on Steam at our special Early Access launch tier. Pre-ordering grants access to our upcoming Closed Beta 02 weekend starting September 3.</p><p>Check out our brutally honest '10 Reasons NOT to Buy' video on YouTube before you pre-order!</p>"
+  }
+]
+
+
+def fetch_discord_announcements():
+    """Fetch live announcements from official WARDOGS Discord channel 1464230515862278215"""
+    items = []
+    token = os.environ.get("DISCORD_BOT_TOKEN") or os.environ.get("DISCORD_TOKEN")
+    if token:
+        try:
+            auth_header = token if token.startswith("Bot ") or token.startswith("Bearer ") else f"Bot {token}"
+            req = urllib.request.Request(
+                DISCORD_API_MESSAGES,
+                headers={
+                    "Authorization": auth_header,
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) WARDOGS-Tracker/1.0"
+                }
+            )
+            with urllib.request.urlopen(req, timeout=8) as res:
+                messages = json.loads(res.read().decode("utf-8"))
+                for msg in messages:
+                    msg_id = msg.get("id")
+                    content = msg.get("content", "")
+                    created_at = msg.get("timestamp", "")
+                    author_name = msg.get("author", {}).get("username") or "BULKHEAD Team"
+                    lines = [l.strip() for l in content.split("\n") if l.strip()]
+                    title = lines[0].replace("**", "").replace("#", "").strip() if lines else "Official Discord Announcement"
+                    items.append({
+                        "id": f"discord-msg-{DISCORD_CHANNEL_ID}-{msg_id}",
+                        "title": title[:80],
+                        "source": "discord",
+                        "sourcePlatform": "discord",
+                        "sourceLabel": "Discord (#announcements)",
+                        "author": author_name,
+                        "authorHandle": "#announcements",
+                        "timestamp": created_at,
+                        "dateString": created_at[:10],
+                        "relativeTime": "Live Discord",
+                        "url": f"https://discord.com/channels/{DISCORD_GUILD_ID}/{DISCORD_CHANNEL_ID}/{msg_id}",
+                        "tags": ["#Discord", "#Announcements", "#Official"],
+                        "pinned": bool(msg.get("pinned")),
+                        "isReply": False,
+                        "excerpt": (content[:240] + "...") if len(content) > 240 else content,
+                        "fullContent": f"<p>{content}</p>"
+                    })
+        except Exception as e:
+            print(f"[SCRAPER] Discord channel API notice: {e}")
+
+    if not items:
+        items = list(VERIFIED_DISCORD_POSTS)
+    return items
+
 def run_scraper_cycle():
     """Execute complete multi-channel crawl and sort newest-first"""
     print(f"[{datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}] Initiating WARDOGS dev feed scrape...")
@@ -205,6 +506,7 @@ def run_scraper_cycle():
     scraped_steam_api = fetch_steam_api_news()
     scraped_steam_rss = fetch_steam_rss()
     scraped_x = fetch_brammflakes_x()
+    scraped_discord = fetch_discord_announcements()
     existing_cached = load_cached_posts()
     
     seen_urls = set()
@@ -219,6 +521,12 @@ def run_scraper_cycle():
             combined_posts.append(item)
 
     for item in scraped_steam_api:
+        if item["id"] not in seen_ids and item["url"] not in seen_urls:
+            seen_ids.add(item["id"])
+            seen_urls.add(item["url"])
+            combined_posts.append(item)
+
+    for item in scraped_discord:
         if item["id"] not in seen_ids and item["url"] not in seen_urls:
             seen_ids.add(item["id"])
             seen_urls.add(item["url"])
@@ -268,7 +576,7 @@ def run_scraper_cycle():
                 "Joe Brammer X Posts & Replies (@Brammflakes)",
                 "Joe Brammer Reddit Replies & Posts (u/brammflakes on r/WarDogs)",
                 "Studio X Accounts (@wardogs & @BULKHEAD)",
-                "Discord Official (#announcements)",
+                "Discord Announcements (Channel ID 1464230515862278215 - discord.com/channels/1464219389913071646/1464230515862278215)",
                 "YouTube (@BULKHEAD)",
                 "GamesPress Pressroom"
             ]

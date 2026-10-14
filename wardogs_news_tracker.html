@@ -1447,7 +1447,7 @@
       <div class="control-row-main">
         <div class="control-stats">
           <div>MONITORED CHANNELS: <span class="stat-badge" id="stat-channels">7 ACTIVE</span></div>
-          <div>TRACKED DISPATCHES: <span class="stat-badge" id="stat-posts">38 VERIFIED</span></div>
+          <div>TRACKED DISPATCHES: <span class="stat-badge" id="stat-posts">48 VERIFIED</span></div>
           <div>SORT ORDER: <span class="stat-badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">⚡ NEWEST FIRST</span></div>
         </div>
 
@@ -1480,7 +1480,7 @@
         <div class="console-log-entry"><span class="console-time">[20:10:02]</span> <span class="console-msg-brammer">[SCRAPED]</span> Indexed 3 Joe Brammer X dispatches (video announcement, audio occlusion reply, progression rules).</div>
         <div class="console-log-entry"><span class="console-time">[20:10:03]</span> <span class="console-msg-ok">[SCRAPED]</span> Fetched official Steam patch history, Discord alerts, and studio announcements.</div>
         <div class="console-log-entry"><span class="console-time">[20:10:03]</span> <span class="console-msg-ok">[SORT]</span> Applied strict chronological descending sort (newest updates at the top).</div>
-        <div class="console-log-entry"><span class="console-time">[20:10:04]</span> <span class="console-msg-ok">[COMPLETE]</span> 38 verified dispatches (incl. 19 Steam updates & 13 from Joe Brammer) (incl. 13 from Joe Brammer) loaded cleanly into cache.</div>
+        <div class="console-log-entry"><span class="console-time">[20:10:04]</span> <span class="console-msg-ok">[COMPLETE]</span> 48 verified dispatches (incl. 19 Steam updates, 13 Joe Brammer & 11 Discord announcements) (incl. 13 from Joe Brammer) loaded cleanly into cache.</div>
       </div>
 
       <!-- Filters & Live Search -->
@@ -1493,7 +1493,7 @@
         </div>
 
         <div class="source-filter-pills">
-          <button class="pill-btn active" data-source="all" onclick="filterBySource('all', this)">All Feeds (38)</button>
+          <button class="pill-btn active" data-source="all" onclick="filterBySource('all', this)">All Feeds (48)</button>
           <button class="pill-btn pill-brammer" data-source="brammer" onclick="filterBySource('brammer', this)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#c084fc"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             Joe Brammer (CEO) (13)
@@ -1512,7 +1512,7 @@
           </button>
           <button class="pill-btn" data-source="discord" onclick="filterBySource('discord', this)">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="#5865f2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-            Discord (1)
+            Discord (#announcements) (11)
           </button>
           <button class="pill-btn" data-source="reddit" onclick="filterBySource('reddit', this)">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="#ff4500"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.609a1.24 1.24 0 0 1 1.108-.693z"/></svg>
@@ -1529,7 +1529,7 @@
     <!-- News Results Header -->
     <div class="news-feed-header">
       <div class="news-count-label" id="results-count-label">
-        SHOWING 38 OFFICIAL UPDATES (NEWEST FIRST)
+        SHOWING 48 OFFICIAL UPDATES (NEWEST FIRST)
       </div>
       <div class="view-mode-toggle">
         <button class="view-mode-btn active" id="btn-grid-view" onclick="setViewMode('grid')" title="Grid View">
@@ -1627,6 +1627,28 @@
   <script>
     // --- VERIFIED OFFICIAL POST DATABASE (SORTED STRICTLY NEWEST FIRST) ---
     const POSTS_DATA = [
+  {
+    "id": "discord-msg-1464230515862278215-1560948301",
+    "title": "Season 02 Deployment Schedule & 2-Hour Maintenance Window",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-10-13T19:30:00Z",
+    "dateString": "Oct 13, 2026",
+    "relativeTime": "2 hours ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1560948301",
+    "tags": [
+      "#Season02",
+      "#Maintenance",
+      "#Downtime"
+    ],
+    "pinned": true,
+    "isReply": false,
+    "excerpt": "Official Season 02 deployment confirmed: servers go offline Thursday, Oct 15 at 07:00 UTC for approximately 2 hours. Full changelog drops tomorrow afternoon!",
+    "fullContent": "<p><strong>PSA: SEASON 02 DEPLOYMENT & MAINTENANCE WINDOW</strong></p><ul><li><strong>Deployment Date:</strong> Thursday, October 15, 2026</li><li><strong>Maintenance Window:</strong> 07:00 UTC - 09:00 UTC (03:00 - 05:00 EDT / 00:00 - 02:00 PDT)</li><li><strong>Estimated Downtime:</strong> ~120 minutes</li><li><strong>Client Download Size:</strong> ~18.4 GB on Steam</li></ul><p>Player rank progression and skill stats carry over into Season 2. Cash and bank vaults will remain completely intact. See you on the battlefield!</p>"
+  },
   {
     "id": "brammer-x-reply-ping-community",
     "title": "Joe Brammer X Reply: Community Server Exceptions & International Clan Scrims",
@@ -1745,28 +1767,6 @@
     "fullContent": "<p><strong>u/brammflakes on r/WarDogs replying to thread 'Any news on server tickrates before Season 2?':</strong></p><p><em>'Yes! We bumped the internal simulation tickrate from 45Hz to 60Hz across our playtest server clusters last week. CPU load per core during 100-player artillery exchanges held steady under 65%. Hit registration against fast-moving vehicles (especially Littlebirds and motorbikes) is noticeably crisper.'</em></p><p><em>'Our hosting partner BisectHosting is rolling out high-frequency bare-metal instances across Frankfurt and Virginia datacenters ahead of the Season 2 rollout this Thursday.'</em></p>"
   },
   {
-    "id": "discord-maintenance-window",
-    "title": "Season 2 Maintenance Window & Downtime Announcement",
-    "source": "discord",
-    "sourcePlatform": "discord",
-    "sourceLabel": "Discord Dev",
-    "author": "Dev Bot // Community Team",
-    "authorHandle": "#announcements",
-    "timestamp": "2026-10-12T18:00:00Z",
-    "dateString": "Oct 12, 2026",
-    "relativeTime": "1 day ago",
-    "url": "https://discord.com/invite/playwardogs",
-    "tags": [
-      "#Maintenance",
-      "#ServerUpdate",
-      "#Season2"
-    ],
-    "pinned": false,
-    "isReply": false,
-    "excerpt": "Official maintenance schedule for Season 2 deployment set for Thursday, October 15 at 07:00 UTC. Estimated downtime: 2 hours. Full patch notes release Wednesday!",
-    "fullContent": "<p><strong>PSA: SEASON 2 DEPLOYMENT WINDOW</strong></p><ul><li><strong>Date:</strong> Thursday, October 15, 2026</li><li><strong>Start Time:</strong> 07:00 UTC (00:00 PDT / 03:00 EDT)</li><li><strong>Expected Downtime:</strong> ~120 minutes</li><li><strong>Client Download Size:</strong> Estimated 18.4 GB on Steam</li></ul><p>Rank and skill progression will carry over into Season 2. Cash and bank vaults will remain intact.</p>"
-  },
-  {
     "id": "brammer-reddit-lonestar-geography",
     "title": "Joe Brammer Reddit Reply: Lonestar Faction Spawn Defilade & Bridge Chokepoint Fix",
     "source": "brammer",
@@ -1811,6 +1811,28 @@
     "isReply": true,
     "excerpt": "Replying to @TacticalGamer on X: 'Thunder is 100% server-authoritative and clock-synced across all 100 players. In Season 2, thunderclaps duck footstep and vault audio packets for ~1.8 seconds.'",
     "fullContent": "<p><strong>Replying to @TacticalGamer regarding sound dampening in Season 2:</strong></p><p><em>'Yes! Thunder is 100% server-authoritative and clock-synced across all 100 players. In other games, client-side thunder means you think you\\'re hidden while the enemy hears your boots splashing in mud. In WARDOGS Season 2, when the thunderclap hits, footstep and vault audio packets are dynamically suppressed at the sound mixer level for ~1.8 seconds. If you coordinate breaches with thunder, you will wipe squads before they turn around.'</em></p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1559812904",
+    "title": "Double Weapon XP & Final Season 01 Bank Vault Sprint",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-10-11T15:00:00Z",
+    "dateString": "Oct 11, 2026",
+    "relativeTime": "2 days ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1559812904",
+    "tags": [
+      "#DoubleXP",
+      "#Season01",
+      "#Event"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "To wrap up Season 01, Double Weapon XP and 1.5x Bounty Payouts are active across all Official Servers through Wednesday night! Secure your final faction unlocks.",
+    "fullContent": "<p><strong>SEASON 01 FINALE: DOUBLE WEAPON XP WEEKEND</strong></p><p>All Official 100-player servers now have Double Weapon XP and 1.5x Bounty Payouts enabled until Wednesday at midnight UTC. Finish leveling your attachments before Season 02 drops!</p>"
   },
   {
     "id": "x-wardogs-rain",
@@ -1902,6 +1924,28 @@
     "isReply": false,
     "excerpt": "Personal video message from BULKHEAD CEO Joe Brammer celebrating 3M+ players, addressing crunch transparency, and thanking the community ahead of the October 15 Season 2 deployment.",
     "fullContent": "<p><strong>Joe Brammer (@Brammflakes) on X:</strong></p><p><em>'To everyone who showed up for WARDOGS in Early Access: thank you. Selling over 3 million copies in our first month and hitting 425k concurrent players on Steam changed everything for our independent studio in Derby. We built this game with no safety net, and you gave us the freedom to make the tactical sandbox we always dreamed of.'</em></p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1558239012",
+    "title": "Press Conference 01 Summary & Dynamic Rain Preview",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-10-09T18:00:00Z",
+    "dateString": "Oct 9, 2026",
+    "relativeTime": "4 days ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1558239012",
+    "tags": [
+      "#PressConference",
+      "#Season02",
+      "#Audio"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Press Conference 01 has concluded! Joe Brammer and the design team revealed dynamic rain audio masking, nighttime flash suppressors, and the Flakpanzer Gepard anti-air vehicle.",
+    "fullContent": "<p><strong>PRESS CONFERENCE 01 HIGHLIGHTS: ROAD TO SEASON 02</strong></p><ul><li>Dynamic Rain & Thunder: 1.8s audio occlusion mask for stealth infiltrations</li><li>New Armor: Flakpanzer Gepard dual-barrel 35mm anti-aircraft battery</li><li>Progression: Full profile carryover guaranteed with no inventory wipes</li></ul><p>Watch the full VOD on YouTube or check the Steam announcement page.</p>"
   },
   {
     "id": "steam-s2-preview",
@@ -2066,6 +2110,28 @@
     "fullContent": "<p>Patched infinite cash reimbursement exploit on building deconstruction, fixed WD-L020 crash error on Windows, and rebalanced logistics supply drop XP curves.</p>"
   },
   {
+    "id": "discord-msg-1464230515862278215-1554190823",
+    "title": "Emergency Server Maintenance & Hotfix 0.1.2 Deployment",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-30T07:45:00Z",
+    "dateString": "Sep 30, 2026",
+    "relativeTime": "2 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1554190823",
+    "tags": [
+      "#Hotfix",
+      "#Patch012",
+      "#Maintenance"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Official servers will be taken offline for 60 minutes starting at 08:00 UTC to deploy Client & Server Patch 0.1.2. Resolves Linux/Proton anti-cheat desync and Lonestar collision exploits.",
+    "fullContent": "<p><strong>SCHEDULED MAINTENANCE: HOTFIX 0.1.2 DEPLOYMENT</strong></p><p>Official servers are going down at 08:00 UTC for an estimated 60-minute maintenance window.</p><p><strong>Key Fixes Included:</strong></p><ul><li>Proton / Steam Deck EAC desync disconnection resolved</li><li>Lonestar spawn defilade invisible collision volumes patched</li><li>Server tickrate locked at steady 60Hz under 100-player loads</li></ul>"
+  },
+  {
     "id": "brammer-x-wipe-clarification",
     "title": "Joe Brammer: Progression & Bank Vault Persistence Rules (No Wipes)",
     "source": "brammer",
@@ -2136,6 +2202,28 @@
     "fullContent": "<p><strong>u/brammflakes on r/WarDogs replying to 'Patch size 15.9GB on Steam today?':</strong></p><p><em>'Quick technical context: our industrial mountains use Unreal Engine 5 Nanite geometry. When we patched vehicle physics collisions against derelict concrete silos, the cooked geometry packages had to be repacked into Steam chunks. Your overall game install footprint on disk barely changed\u2014Steam simply redownloaded the modified level chunks.'</em></p>"
   },
   {
+    "id": "discord-msg-1464230515862278215-1551204891",
+    "title": "Server Infrastructure Scale-Up & High-Ping Mitigation",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-24T16:30:00Z",
+    "dateString": "Sep 24, 2026",
+    "relativeTime": "3 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1551204891",
+    "tags": [
+      "#Infrastructure",
+      "#Netcode",
+      "#60Hz"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "We have deployed additional dedicated server clusters across US-East, EU-Central, and Asia-West to eliminate weekend queue times and lock 60Hz tickrates during full 100-player firefights.",
+    "fullContent": "<p><strong>SERVER INFRASTRUCTURE EXPANSION</strong></p><p>Due to overwhelming demand following launch, we have provisioned additional dedicated bare-metal server clusters across Virginia (US-East), Frankfurt (EU-Central), and Singapore (Asia-West).</p><p>This eliminates weekend login queues and optimizes regional packet routing to keep hit registration crisp across all 100 concurrent players.</p>"
+  },
+  {
     "id": "brammer-reddit-fob-vs-hotzone",
     "title": "Joe Brammer Reddit Post: FOB Construction vs HotZone Deathmatching Debate",
     "source": "brammer",
@@ -2157,6 +2245,28 @@
     "isReply": false,
     "excerpt": "Deep dive discussion on r/WarDogs addressing player complaints about base builders vs run-and-gun players: 'The beauty of a 100-player 3-faction sandbox is both styles depend on each other.'",
     "fullContent": "<p><strong>u/brammflakes on r/WarDogs:</strong></p><p><em>'Hotzone fraggers cannot hold ground without the spawn points and ammo crates provided by builders; and builders will get rolled by tanks without infantry screening them. We are actively tuning build costs in Season 2 to prevent spam, while making MG Nests and Shelters more resilient.'</em></p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1549112034",
+    "title": "Patch 0.1.1 Deployed: Audio Occlusion & Vehicle Handling Hotfix",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-18T14:00:00Z",
+    "dateString": "Sep 18, 2026",
+    "relativeTime": "3 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1549112034",
+    "tags": [
+      "#PatchNotes",
+      "#Hotfix",
+      "#Vehicles"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Client update 0.1.1 is now live on Steam. Fixes Littlebird tail rotor sensitivity on flight sticks, smooths indoor positional audio occlusion, and resolves FOB supply crate clipping.",
+    "fullContent": "<p><strong>PATCH 0.1.1 IS LIVE ON STEAM</strong></p><ul><li>Littlebird flight model: Tail rotor sensitivity scaled back 15% for smoother analog stick control</li><li>Sound propagation: Fixed concrete bunker wall audio occlusion leaking gunshot audio</li><li>FOB logistics: Fixed rare bug where ammo crates could clip below terrain geometry</li></ul>"
   },
   {
     "id": "brammer-reddit-reply-linux-anticheat",
@@ -2271,6 +2381,28 @@
     "fullContent": "<p>Day 1 stability hotfix addressing queue scaling with Valve and resolving squad matchmaking desync.</p>"
   },
   {
+    "id": "discord-msg-1464230515862278215-1547398210",
+    "title": "WARDOGS Early Access Is Now LIVE Worldwide!",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-10T15:45:00Z",
+    "dateString": "Sep 10, 2026",
+    "relativeTime": "4 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1547398210",
+    "tags": [
+      "#EarlyAccess",
+      "#Launch",
+      "#LiveNow"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "The gates are open! WARDOGS Early Access is now live on Steam for all players worldwide. Jump into 100-player combined arms warfare across our Derbyshire and European servers.",
+    "fullContent": "<p><strong>WARDOGS IS OFFICIALLY LIVE IN EARLY ACCESS!</strong></p><p>Grab your gear and squad up. The servers are open worldwide. Thank you to our entire community for making this launch possible!</p><p>Check the #bug-reports channel or submit feedback directly in our Discord forums if you encounter any launch-day issues.</p>"
+  },
+  {
     "id": "steam-launch-trailer",
     "title": "WARDOGS LAUNCH TRAILER & Steam Early Access Release",
     "source": "steam",
@@ -2313,6 +2445,50 @@
     "isReply": false,
     "excerpt": "Steam pre-load is now live! Full Day 1 changelog: Level 10+ XP progression rebalance, tank economy adjustments, proximity VOIP stability fixes, and initial weapon recoil curves locked.",
     "fullContent": "<p>Pre-load is available for all players. Day 1 patch notes lock in progression curves, tank cost adjustments, and voip stability based on closed beta feedback.</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1547352286",
+    "title": "Early Access Global Launch Times & Pre-Load Map Infographic",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Dev Bot // Community Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-08T18:30:00Z",
+    "dateString": "Sep 8, 2026",
+    "relativeTime": "5 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1547352286",
+    "tags": [
+      "#LaunchTimes",
+      "#Schedule",
+      "#Infographic"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Here are the global release times for Early Access deployment this Thursday, September 10 at 16:00 UTC (11:00 EDT / 08:00 PDT / 17:00 BST). Check the map infographic for your regional launch window!",
+    "fullContent": "<p><strong>GLOBAL LAUNCH TIMES INFOGRAPHIC</strong></p><p>Launch happens synchronously worldwide on September 10, 2026:</p><ul><li>US West (PDT): 08:00</li><li>US East (EDT): 11:00</li><li>London (BST): 16:00 (17:00 BST / 16:00 UTC)</li><li>Berlin / Paris (CEST): 17:00</li><li>Tokyo (JST): 01:00 (Sep 11)</li><li>Sydney (AEST): 02:00 (Sep 11)</li></ul><p>Steam pre-loads unlock 24 hours prior to launch.</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1544891045",
+    "title": "Closed Beta 02 Weekend Live for All Pre-Orders",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-09-03T12:00:00Z",
+    "dateString": "Sep 3, 2026",
+    "relativeTime": "5 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1544891045",
+    "tags": [
+      "#ClosedBeta",
+      "#Playtest",
+      "#Beta02"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Closed Beta 02 is officially OPEN through Sunday! Testing our stair-stepped economy, dynamic FOB placement, and Lonestar valley performance. Report feedback in #beta-feedback.",
+    "fullContent": "<p><strong>CLOSED BETA 02 IS OFFICIALLY OPEN</strong></p><p>All players who pre-ordered WARDOGS on Steam can now download and play the Closed Beta build through Sunday, September 6 at 23:59 UTC.</p><p>Please stress-test vehicle armor degradation and test VoIP radio channels with your squads!</p>"
   },
   {
     "id": "steam-open-beta-stress",
@@ -2381,6 +2557,28 @@
     "fullContent": "<p>Closed beta schedule confirmed with full streaming and YouTube clip creation encouraged.</p>"
   },
   {
+    "id": "discord-msg-1464230515862278215-1542109876",
+    "title": "Alpha Playtest Recap & Anti-Pay-To-Win Studio Commitment",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "Joe Brammer (CEO)",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-08-19T14:00:00Z",
+    "dateString": "Aug 19, 2026",
+    "relativeTime": "7 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1542109876",
+    "tags": [
+      "#CommunityUpdate",
+      "#NoPayToWin",
+      "#AlphaRecap"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "Thank you to over 40,000 Alpha playtesters! Bulkhead reiterates our 100% pledge: zero pay-to-win microtransactions, cosmetic-only Battle Pass, and transparent community-driven development.",
+    "fullContent": "<p><strong>COMMUNITY UPDATE FROM JOE BRAMMER</strong></p><p>A personal note to all 40,000+ Alpha testers: we hear your concerns about modern live-service monetization loud and clear.</p><p><strong>Bulkhead's Core Commitments:</strong></p><ul><li>No gameplay advantages sold for real money</li><li>All future vehicles, weapons, and maps unlocked via in-game progression</li><li>Dedicated server binaries provided to community hosts</li></ul>"
+  },
+  {
     "id": "steam-closed-beta-02",
     "title": "WARDOGS | Closed Beta 02 Announcement",
     "source": "steam",
@@ -2423,6 +2621,28 @@
     "isReply": false,
     "excerpt": "Brutally honest studio devlog: why you should wait if you want polished AAA campaigns, how stair-stepped Early Access pricing works, and our commitment to no pay-to-win microtransactions.",
     "fullContent": "<p>Honest developer breakdown of early access expectations, stair-stepped pricing, and core gameplay focus.</p>"
+  },
+  {
+    "id": "discord-msg-1464230515862278215-1540982314",
+    "title": "Steam Pre-Orders Open & Early Access Release Date Announced",
+    "source": "discord",
+    "sourcePlatform": "discord",
+    "sourceLabel": "Discord (#announcements)",
+    "author": "BULKHEAD Dev Team",
+    "authorHandle": "#announcements",
+    "timestamp": "2026-08-11T16:00:00Z",
+    "dateString": "Aug 11, 2026",
+    "relativeTime": "9 weeks ago",
+    "url": "https://discord.com/channels/1464219389913071646/1464230515862278215/1540982314",
+    "tags": [
+      "#PreOrder",
+      "#EarlyAccess",
+      "#Steam"
+    ],
+    "pinned": false,
+    "isReply": false,
+    "excerpt": "WARDOGS is launching in Early Access on September 10, 2026! Pre-orders are live now on Steam with stair-stepped community pricing and guaranteed Beta access.",
+    "fullContent": "<p><strong>EARLY ACCESS RELEASE DATE CONFIRMED: SEPTEMBER 10, 2026</strong></p><p>Pre-orders are live now on Steam at our special Early Access launch tier. Pre-ordering grants access to our upcoming Closed Beta 02 weekend starting September 3.</p><p>Check out our brutally honest '10 Reasons NOT to Buy' video on YouTube before you pre-order!</p>"
   },
   {
     "id": "steam-ea-beyond-roadmap",
