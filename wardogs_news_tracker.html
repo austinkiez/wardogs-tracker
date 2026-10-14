@@ -2630,53 +2630,79 @@
     });
 
 
-    // Live SteamDB / Steam Player Count Polling Engine
+        // Bulletproof Live SteamDB / Steam Player Count Polling Engine
     async function updateLiveSteamPlayerCount() {
       const statusBadge = document.getElementById("player-sync-status");
       const lastCheckedEl = document.getElementById("player-last-checked");
-      
-      // Fallback hierarchy: local API endpoint -> static JSON -> public CORS proxy to Steam API
+
       const steamAppId = "1867240";
-      const directSteamUrl = `https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${steamAppId}`;
-      const corsProxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(directSteamUrl)}`;
-      
-      const endpoints = [
-        "/api/players",
-        corsProxyUrl,
-        "/api/news",
-        "wardogs_news.json"
+      const targetSteamUrl = `https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${steamAppId}`;
+
+      // Multi-tier proxy & API strategy:
+      // 1. Local backend server (/api/players) - zero CORS issues when running server.py
+      // 2. High-speed raw CORS proxies (corsproxy.io, codetabs)
+      // 3. Fallback JSON proxy wrappers (allorigins /get)
+      // 4. Static local JSON cache (wardogs_news.json)
+      const sources = [
+        { name: "Local Server API", url: "/api/players", type: "direct" },
+        { name: "CORSProxy.io", url: `https://corsproxy.io/?url=${encodeURIComponent(targetSteamUrl)}`, type: "direct" },
+        { name: "CodeTabs Proxy", url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetSteamUrl)}`, type: "direct" },
+        { name: "AllOrigins JSON Wrapper", url: `https://api.allorigins.win/get?url=${encodeURIComponent(targetSteamUrl)}`, type: "allorigins_wrapper" },
+        { name: "Local Scraper Cache", url: "wardogs_news.json", type: "cache_json" },
+        { name: "Backend News API", url: "/api/news", type: "cache_json" }
       ];
 
-      for (const ep of endpoints) {
+      for (const src of sources) {
         try {
-          const res = await fetch(ep, { cache: "no-store" });
-          if (res.ok) {
-            const data = await res.json();
-            let count = null;
-            if (data.response && data.response.player_count !== undefined) {
-              count = data.response.player_count;
-            } else if (data.player_count !== undefined) {
-              count = data.player_count;
-            } else if (data.metadata && data.metadata.live_player_count) {
-              count = data.metadata.live_player_count;
-            }
+          console.log(`[STEAM-SYNC] Polling live player count via: ${src.name}`);
+          const res = await fetch(src.url, { cache: "no-store" });
+          if (!res.ok) {
+            console.warn(`[STEAM-SYNC] ${src.name} returned HTTP ${res.status}`);
+            continue;
+          }
 
-            if (count && count > 0) {
-              setPlayerCountDisplay(count);
-              if (lastCheckedEl) {
-                const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                lastCheckedEl.textContent = `Synced: ${nowTime}`;
-              }
-              if (statusBadge) {
-                statusBadge.textContent = "STEAMDB LIVE";
-                statusBadge.style.color = "var(--accent-green)";
-              }
-              return;
+          let count = null;
+          if (src.type === "allorigins_wrapper") {
+            const wrapperData = await res.json();
+            if (wrapperData && wrapperData.contents) {
+              try {
+                const parsed = JSON.parse(wrapperData.contents);
+                count = parsed?.response?.player_count;
+              } catch(e) {}
             }
+          } else if (src.type === "cache_json") {
+            const cacheData = await res.json();
+            count = cacheData?.metadata?.live_player_count;
+          } else {
+            const data = await res.json();
+            count = data?.response?.player_count ?? data?.player_count;
+          }
+
+          if (count && count > 0) {
+            console.log(`[STEAM-SYNC] Live player count successfully retrieved: ${count} (Source: ${src.name})`);
+            setPlayerCountDisplay(count);
+            if (lastCheckedEl) {
+              const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              lastCheckedEl.textContent = `Synced: ${nowTime}`;
+            }
+            if (statusBadge) {
+              statusBadge.textContent = "STEAMDB LIVE";
+              statusBadge.style.color = "var(--accent-green)";
+              statusBadge.title = `Live data from Valve Steam API via ${src.name}`;
+            }
+            return; // Success, end polling chain
           }
         } catch (err) {
-          // Continue to next fallback
+          console.warn(`[STEAM-SYNC] Endpoint failed (${src.name}):`, err.message);
         }
+      }
+
+      // If all live endpoints were blocked (e.g. offline, or Brave Shields blocking third-party proxies on file://)
+      console.warn("[STEAM-SYNC] All live endpoints failed or blocked by browser security. Displaying cached baseline.");
+      if (statusBadge) {
+        statusBadge.textContent = "STEAMDB CACHED";
+        statusBadge.style.color = "var(--accent-amber)";
+        statusBadge.title = "Local browser security (Brave Shields or file://) prevented live proxy fetch. Start 'python3 server.py' or allow CORS for live numbers.";
       }
     }
 
