@@ -36,7 +36,7 @@ class SecureTrackerHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
         # Security & CORS headers
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, HEAD, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("X-Frame-Options", "SAMEORIGIN")
@@ -46,6 +46,34 @@ class SecureTrackerHandler(SimpleHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(204)
         self.end_headers()
+
+    def do_POST(self):
+        clean_path = self.path.split("?")[0].rstrip("/")
+        if clean_path in ("/api/scrape", "/api/sync"):
+            print("[SERVER] Scrape cycle triggered via POST " + clean_path)
+            try:
+                from scraper import run_scraper_cycle
+                payload = run_scraper_cycle()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+                self.end_headers()
+                res = {
+                    "status": "success",
+                    "message": "Scrape cycle completed",
+                    "posts_count": len(payload.get("posts", [])),
+                    "last_updated": payload.get("metadata", {}).get("last_updated")
+                }
+                self.wfile.write(json.dumps(res).encode("utf-8"))
+                return
+            except Exception as e:
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode("utf-8"))
+                return
+
+        self.send_error(404, "Endpoint not found")
 
     def do_GET(self):
         # Normalize and validate path to prevent path traversal
