@@ -1011,6 +1011,129 @@
         align-items: stretch;
       }
     }
+  
+    /* Header Telemetry & Status Widgets */
+    .header-widgets-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: stretch;
+      margin-top: 1.25rem;
+    }
+
+    .telemetry-card {
+      background: rgba(10, 13, 18, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 250px;
+      flex: 1;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .telemetry-card:hover {
+      border-color: var(--accent-amber);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .telemetry-card-players {
+      border-left: 3px solid var(--accent-green);
+    }
+
+    .telemetry-card-reviews {
+      border-left: 3px solid var(--accent-cyan);
+    }
+
+    .telemetry-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .telemetry-header-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .telemetry-live-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--accent-green);
+      animation: pulse-dot 1.8s infinite ease-in-out;
+    }
+
+    .telemetry-main-metric {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .telemetry-big-number {
+      font-family: var(--font-mono);
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .telemetry-badge-review {
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #34d399;
+      letter-spacing: 0.02em;
+    }
+
+    .telemetry-percentage {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #6ee7b7;
+      background: rgba(16, 185, 129, 0.15);
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    .telemetry-sub-metric {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.35rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 0.35rem;
+    }
+
+    .telemetry-ext-link-icon {
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+
+    .telemetry-card:hover .telemetry-ext-link-icon {
+      opacity: 1;
+      color: var(--accent-amber);
+    }
+
   </style>
 </head>
 <body>
@@ -1022,14 +1145,17 @@
         <span class="radar-dot"></span>
         <span>BULKHEAD DEV INTEL // RADAR ACTIVE</span>
       </div>
+      <div class="status-item">
+        <span>LIVE PLAYERS: <strong style="color: #34d399;">98,765 ONLINE</strong></span>
+      </div>
+      <div class="status-item">
+        <span>REVIEWS: <strong style="color: #38bdf8;">MOSTLY POSITIVE (79%)</strong></span>
+      </div>
       <div class="status-item" style="color: var(--text-muted);">
-        <span>GAME VERSION: <strong>v0.1.2.1 EARLY ACCESS</strong></span>
+        <span>VERSION: <strong>v0.1.2.1 EA</strong></span>
       </div>
       <div class="status-item">
-        <span>LEAD DEV TRACKED: <strong>JOE BRAMMER (@Brammflakes / u/brammflakes)</strong></span>
-      </div>
-      <div class="status-item">
-        <span>NEXT DEPLOYMENT: <strong>SEASON 2 (OCT 15, 2026)</strong></span>
+        <span>NEXT: <strong>SEASON 2 (OCT 15)</strong></span>
       </div>
     </div>
     <div class="status-items">
@@ -1072,11 +1198,11 @@
               <div class="timer-lbl">Hours</div>
             </div>
             <div class="timer-segment">
-              <div class="timer-num" id="cd-mins">49</div>
+              <div class="timer-num" id="cd-mins">43</div>
               <div class="timer-lbl">Mins</div>
             </div>
             <div class="timer-segment">
-              <div class="timer-num" id="cd-secs">13</div>
+              <div class="timer-num" id="cd-secs">20</div>
               <div class="timer-lbl">Secs</div>
             </div>
           </div>
@@ -1084,6 +1210,47 @@
             Target: Oct 15, 2026 // 07:00 UTC Maintenance
           </div>
         </div>
+      </div>
+
+      <!-- Live Steam Telemetry in Header: Current Player Count & Review Status -->
+      <div class="header-widgets-grid">
+        <!-- Live Player Count Card -->
+        <a href="https://steamdb.info/app/1867240/charts/" target="_blank" rel="noopener noreferrer" class="telemetry-card telemetry-card-players" title="View WARDOGS Live Charts on SteamDB">
+          <div class="telemetry-card-header">
+            <div class="telemetry-header-title">
+              <span class="telemetry-live-dot"></span>
+              <span>LIVE STEAM TELEMETRY</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#66c0f4"><path d="M12 0C5.37 0 0 5.37 0 12a12 12 0 0 0 8.87 11.58l3.66-5.23a3.5 3.5 0 0 1-1.03-2.52c0-1.85 1.44-3.37 3.27-3.48l2.64-3.79A6.01 6.01 0 0 0 12 6a6 6 0 0 0-6 6c0 .7.12 1.37.34 2L.92 16.3A11.96 11.96 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0z"/></svg>
+          </div>
+          <div class="telemetry-main-metric">
+            <div class="telemetry-big-number">98,765</div>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #34d399; font-family: var(--font-mono);">PLAYERS ONLINE</span>
+          </div>
+          <div class="telemetry-sub-metric">
+            <span>24h Peak: 142,390 • All-Time Peak: <strong>428,666</strong></span>
+            <svg class="telemetry-ext-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </a>
+
+        <!-- Steam Review Status Card -->
+        <a href="https://store.steampowered.com/app/1867240/WARDOGS/" target="_blank" rel="noopener noreferrer" class="telemetry-card telemetry-card-reviews" title="View WARDOGS Reviews on Steam">
+          <div class="telemetry-card-header">
+            <div class="telemetry-header-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#10b981"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+              <span>OVERALL REVIEW STATUS</span>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim);">STEAM RATINGS</span>
+          </div>
+          <div class="telemetry-main-metric">
+            <div class="telemetry-badge-review">MOSTLY POSITIVE</div>
+            <span class="telemetry-percentage">79%</span>
+          </div>
+          <div class="telemetry-sub-metric">
+            <span>Based on <strong>66,938+ Steam Reviews</strong> (73.4% SteamDB)</span>
+            <svg class="telemetry-ext-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+        </a>
       </div>
     </header>
 
