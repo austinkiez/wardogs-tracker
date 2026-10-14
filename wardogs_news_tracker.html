@@ -946,7 +946,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
     }
 
     .intel-title {
@@ -1413,14 +1412,11 @@
 
     <!-- Season 2 Tactical Briefing Accordion -->
     <section class="intel-highlights-drawer">
-      <div class="intel-header" onclick="toggleIntelDrawer()">
+      <div class="intel-header">
         <div class="intel-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           SEASON 2 INTEL BRIEFING: "DYNAMIC COMBAT & REBALANCING"
           <span class="brand-tag" style="background:#1e293b; color:var(--accent-amber); border: 1px solid var(--accent-amber);">LAUNCHING OCT 15</span>
-        </div>
-        <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim);" id="intel-toggle-text">
-          [COLLAPSE -]
         </div>
       </div>
       <div class="intel-grid" id="intel-grid">
@@ -1447,10 +1443,9 @@
     <section class="scraper-control-box">
       <div class="control-row-main">
         <div class="control-stats">
-          <div>MONITORED CHANNELS: <span class="stat-badge" id="stat-channels">7 ACTIVE (INCL. BRAMMER)</span></div>
+          <div>MONITORED CHANNELS: <span class="stat-badge" id="stat-channels">7 ACTIVE</span></div>
           <div>TRACKED DISPATCHES: <span class="stat-badge" id="stat-posts">38 VERIFIED</span></div>
           <div>SORT ORDER: <span class="stat-badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">⚡ NEWEST FIRST</span></div>
-          <div>LEAD DEV STATUS: <span class="stat-badge" style="background: rgba(168, 85, 247, 0.2); color: #d8b4fe;">u/brammflakes SYNCED</span></div>
         </div>
 
         <div class="control-actions">
@@ -2767,17 +2762,7 @@
       }
     }
 
-    function toggleIntelDrawer() {
-      const grid = document.getElementById("intel-grid");
-      const toggle = document.getElementById("intel-toggle-text");
-      if (grid.style.display === "none") {
-        grid.style.display = "grid";
-        toggle.textContent = "[COLLAPSE -]";
-      } else {
-        grid.style.display = "none";
-        toggle.textContent = "[EXPAND +]";
-      }
-    }
+
 
     // Config Modal
     function openConfigModal() {
